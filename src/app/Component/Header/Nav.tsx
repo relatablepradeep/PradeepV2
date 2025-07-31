@@ -6,7 +6,7 @@ export default function Nav() {
 
         <>
 
-            <header className="border-0 text-black  bg-gray-100">
+            <header className="border-0 shadow sticky top-0 z-50 text-black  bg-gray-100">
 
                 <main className="flex  justify-evenly   ">
 

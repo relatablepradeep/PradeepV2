@@ -1,8 +1,12 @@
 import Nav from "./Component/Header/Nav";
+import Email from "./Component/Home/Email";
 import MYhome from "./Component/Home/Home";
 
 
 export default function Home() {
+
+   
+
   return (
    <div>
 
@@ -10,6 +14,11 @@ export default function Home() {
 
 
     <MYhome/>
+
+    <Email/>
+
+
+   
 
    </div>
   );
