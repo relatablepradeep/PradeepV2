@@ -1,5 +1,4 @@
-
-import MYhome from "./Component/Home/Home";
+import MYhome from "./Home/Home";
 
 
 export default function Home() {
@@ -11,6 +10,8 @@ export default function Home() {
     <>
 
     <MYhome/>
+
+   
     
     
     </>

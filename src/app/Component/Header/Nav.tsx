@@ -26,9 +26,9 @@ export default function Nav() {
 
                     <div className="relative  space-x-36 top-10 font-extralight  text-2xl">
 
-                        <Link href='/'>Home</Link>
+                        <Link href='/Home'>Home</Link>
 
-                        <Link href='/'>Project</Link>
+                        <Link href='/Project'>Project</Link>
 
                         <Link href='/'>About me</Link>
 
