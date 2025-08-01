@@ -8,7 +8,7 @@ const Text = () => {
   const containerRef = useRef(null);
   const letterRefs = useRef([]);
 
-  const word = "PROJECT";
+  const word = "Project";
 
   // Check if a letter is under the circle
   const isLetterUnderCircle = (letterIndex) => {
@@ -114,18 +114,14 @@ const Text = () => {
         </div>
 
         {/* Additional Demo Words */}
-        <div className="flex gap-12 justify-center">
+        {/* <div className="flex gap-12 justify-center">
           <RandomMaskText text="DESIGN" />
           <RandomMaskText text="CODE" />
           <RandomMaskText text="CREATE" />
-        </div>
+        </div> */}
 
         {/* Info Text */}
-        <div className="text-center">
-          <p className="text-gray-600 text-lg">
-            Watch the circular glass randomly move and highlight letters
-          </p>
-        </div>
+       
       </div>
     </div>
   );
