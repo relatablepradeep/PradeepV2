@@ -1,12 +1,14 @@
-import Text from "../Animation/Text/Text"
+import Project from "./Project"
 
 
-export default function Project(){
+export default function Projects(){
 
     return(
         <>
 
-        <Text/>
+        <Project/>
+
+        
         
         
         </>

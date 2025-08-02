@@ -62,8 +62,8 @@ const Text = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center">
-      <div className="space-y-12">
+    <div className=" bg-gray-100 w-50 flex items-center justify-center ">
+      <div className="">
         {/* Main Project Text with Random Mask Effect */}
         <div 
           ref={containerRef}
@@ -75,10 +75,10 @@ const Text = () => {
               <span
                 key={index}
                 ref={el => letterRefs.current[index] = el}
-                className={`text-8xl font-bold select-none transition-all duration-700 ease-out ${
+                className={`text-6xl font-bold select-none transition-all duration-700 ease-out ${
                   isLetterUnderCircle(index)
-                    ? 'text-blue-400' 
-                    : 'text-gray-300'
+                    ? 'text-white-100' 
+                    : 'text-blue-400'
                 }`}
                 style={{
                   transformOrigin: 'center',
@@ -95,8 +95,8 @@ const Text = () => {
           <div
             className="absolute pointer-events-none transition-all duration-1000 ease-in-out"
             style={{
-              width: '160px',
-              height: '160px',
+              width: '140px',
+              height: '140px',
               background: 'radial-gradient(circle, rgba(0, 91, 255, 0.1) 0%, rgba(138, 43, 226, 0.8) 70%, rgba(138, 43, 226, 0.95) 100%)',
               borderRadius: '50%',
               left: `${circlePosition.x - 80}px`,
