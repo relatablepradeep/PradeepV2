@@ -1,23 +1,33 @@
 'use client'
-import React from 'react';
-import TextTransition, { presets } from 'react-text-transition';
+import { TypeAnimation } from 'react-type-animation';
 
-const TEXTS = ['Frontend devloper', 'Backend devloper', 'Web 3 devloper', 'Vibe coder'];
+const TEXTS = [
+  'Frontend developer',
+  'Backend developer',
+  'Web 3 developer',
+  'Vibe coder'
+];
 
-export default function Text(){
-  const [index, setIndex] = React.useState(0);
-
-  React.useEffect(() => {
-    const intervalId = setInterval(
-      () => setIndex((index) => index + 1),
-      3000, // every 3 seconds
-    );
-    return () => clearTimeout(intervalId);
-  }, []);
-
+export default function Typing() {
   return (
-    <h1>
-      <TextTransition springConfig={presets.wobbly}>{TEXTS[index % TEXTS.length]}</TextTransition>
-    </h1>
+    <div
+      style={{
+        display: 'inline-block',
+        width: '300px',       // enough for the longest phrase
+        textAlign: 'left',
+        fontFamily: 'monospace', // keeps spacing consistent
+        overflow: 'hidden',
+      }}
+    >
+      <TypeAnimation
+        sequence={TEXTS.flatMap(text => [text, 1000])}
+        style={{
+          fontSize: '2em',
+          display: 'inline-block',
+          whiteSpace: 'nowrap',
+        }}
+        repeat={Infinity}
+      />
+    </div>
   );
-};
+}

@@ -30,7 +30,7 @@ export default function Nav() {
 
                         <Link href='/Project'>Project</Link>
 
-                        <Link href='/'>About me</Link>
+                        <Link href='/About'>About me</Link>
 
                         <Link href='/'>Blog</Link>
 

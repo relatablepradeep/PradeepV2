@@ -6,6 +6,7 @@ import Flag from 'react-world-flags';
 import Typing from '@/app/Animation/Typing/Typing';
 import { Mail, MapPin, Code } from 'lucide-react';
 import { useState } from 'react';
+import Social from '../Component/Social/Social'
 
 export default function MyHome() {
   const [copied, setCopied] = useState(false);
@@ -48,12 +49,17 @@ export default function MyHome() {
               Pradeep!
             </div>
 
-            <button className="mr-42 absolute mt-80">
+            <button className=" absolute mt-80">
               <Typing />
             </button>
           </span>
 
-          <div className="absolute   left-12 space-y-4 ">
+         
+        </div>
+
+
+
+         <div className="absolute   left-14 space-y-4 mt-20 text-xl  ">
 
             <div className="text-lg font-semibold text-gray-800 flex items-center space-x-2">
               <Code className="w-4 h-4" />
@@ -81,7 +87,19 @@ export default function MyHome() {
               </span>
             </div>
           </div>
-        </div>
+
+
+
+          <div className=" fixed bottom-1    ">
+
+
+            <Social/>
+          </div>
+
+
+
+
+
       </section>
     </main>
   );
