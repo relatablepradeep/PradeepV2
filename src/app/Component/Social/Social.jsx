@@ -5,12 +5,12 @@ export default function SocialMediaPanel() {
   const [active, setActive] = useState(null);
 
   const icons = [
-    { id: "linkedin", icon: <FaLinkedin />, color: "text-blue-600", label: "LinkedIn", handle: "@myLinkedInID" },
-    { id: "github", icon: <FaGithub />, color: "text-gray-800", label: "GitHub", handle: "@myGitHubID" },
-    { id: "x", icon: <FaXTwitter />, color: "text-black", label: "X", handle: "@myXID" },
+    { id: "linkedin", icon: <FaLinkedin />, color: "text-blue-600", label: "LinkedIn", handle: "@relatablepradeep" },
+    { id: "github", icon: <FaGithub />, color: "text-gray-800", label: "GitHub", handle: "@relatablepradeep" },
+    { id: "x", icon: <FaXTwitter />, color: "text-black", label: "X", handle: "@relatablepradeep" },
     { id: "instagram", icon: <FaInstagram />, color: "text-pink-500", label: "Instagram", handle: "@myInstagramID" },
-    { id: "reddit", icon: <FaReddit />, color: "text-orange-500", label: "Reddit", handle: "@myRedditID" },
-    { id: "youtube", icon: <FaYoutube />, color: "text-red-600", label: "YouTube", handle: "@myYouTubeID" },
+    { id: "reddit", icon: <FaReddit />, color: "text-orange-500", label: "Reddit", handle: "@relatablepradeep" },
+    { id: "youtube", icon: <FaYoutube />, color: "text-red-600", label: "YouTube", handle: "@relatablepradeep" },
   ];
 
   return (
