@@ -1,5 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
+import {FaGithub } from "react-icons/fa6";
+
 
 interface ContributionDay {
   date: string;
@@ -100,57 +102,101 @@ export default function Github() {
     <div className="fixed top-0 left-0 w-1/2 min-h-screen p-8 bg-gradient-to-br from-gray-50 to-gray-100">
       <div className="max-w-2xl relative top-48  left-24 ">
         
-        {/* Recent Repositories Slider */}
         {repos.length > 0 && (
-          <div className="relative bottom-16 ">
-            <h2 className="text-lg font-semibold mb-6 text-gray-700 text-center">
-            Recent Code Drops
+          <div className="relative bottom-10  ">
+            <h2 className="text-lg font-semibold mb-6  text-gray-700 text-center">
+              Recent Code Drops
             </h2>
 
-            <div className="relative w-full h-40 overflow-hidden">
-              {repos.map((repo, index) => (
-                <div
-                  key={repo.name}
-                  className="absolute w-full transition-transform duration-700 ease-in-out"
-                  style={{
-                    transform: `translateY(${(index - currentIndex) * 100}%)`,
-                    opacity: index === currentIndex ? 1 : 0,
-                    transition: "transform 0.7s ease-in-out, opacity 0.7s ease-in-out",
-                  }}
-                >
-                  <div className="w-60 mx-auto bg-gradient-to-br from-blue-50 to-indigo-100 p-4 rounded-xl border-2 border-blue-200 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
-                    <a
-                      href={repo.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-blue-700 hover:text-blue-900 font-semibold text-sm line-clamp-1 block mb-2"
-                    >
-                      {repo.name}
-                    </a>
+            <div className="relative flex left-24  ">
+             
 
-                    {repo.description && (
-                      <p className="text-xs text-gray-600 mb-2 line-clamp-2 leading-tight">
-                        {repo.description}
-                      </p>
-                    )}
+              <div className="relative w-full h-40 overflow-hidden">
 
-                    {repo.primaryLanguage && (
-                      <div className="flex justify-start">
-                        <span
-                          className="inline-block px-2 py-1 text-xs rounded-full font-medium"
-                          style={{
-                            backgroundColor: repo.primaryLanguage.color || "#6B7280",
-                            color: "white",
-                            fontSize: "10px",
-                          }}
-                        >
-                          {repo.primaryLanguage.name}
-                        </span>
-                      </div>
-                    )}
+
+<a
+  href="https://github.com/relatablepradeep"
+  target="_blank"
+  rel="noopener noreferrer"
+  className="absolute top-1/2 left-15 -translate-x-1/2 -translate-y-1/2
+             flex items-center justify-center
+             w-25 h-25 border-2 rounded-full
+             bg-gray-200 text-gray-700
+             transition-all duration-300
+             hover:bg-blue-950 hover:text-white hover:scale-110
+             cursor-pointer shadow-md hover:shadow-lg z-[9999] "
+>
+  <FaGithub className="text-6xl" />
+</a>
+
+                  
+
+                 
+                   
+
+
+             
+
+
+
+
+                {repos.map((repo, index) => (
+                  <div
+                    key={repo.name}
+                    className="absolute w-full transition-transform duration-700  ease-in-out mt-5"
+                    style={{
+                      transform: `translateY(${(index - currentIndex) * 100}%)`,
+                      opacity: index === currentIndex ? 1 : 0,
+                      transition: "transform 0.7s ease-in-out, opacity 0.7s ease-in-out",
+                    }}
+                  >
+
+
+
+
+                    <div className="w-80  mx-auto  bg-gradient-to-br from-blue-50 to-indigo-100 p-6 rounded-xl border-2 border-blue-200 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
+                      <a
+                        href={repo.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-blue-700 hover:text-blue-900 font-semibold text-sm line-clamp-1 block mb-2"
+                      >
+                        {repo.name}
+                      </a>
+
+                      {repo.description && (
+                        <p className="text-xs text-gray-600 mb-2 line-clamp-2 leading-tight">
+                          {repo.description}
+                        </p>
+                      )}
+
+                      {repo.primaryLanguage && (
+                        <div className="flex justify-start">
+                          <span
+                            className="inline-block px-2 py-1 text-xs rounded-full font-medium"
+                            style={{
+                              backgroundColor: repo.primaryLanguage.color || "#6B7280",
+                              color: "white",
+                              fontSize: "10px",
+                            }}
+                          >
+                            {repo.primaryLanguage.name}
+                          </span>
+                        </div>
+                      )}
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
+
+
+                
+                  
+
+
+
+
+
+              </div>
             </div>
           </div>
         )}
