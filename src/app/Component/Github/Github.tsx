@@ -98,13 +98,13 @@ export default function Github() {
 
   return (
     <div className="fixed top-0 left-0 w-1/2 min-h-screen p-8 bg-gradient-to-br from-gray-50 to-gray-100">
-      <div className="max-w-2xl relative top-96 left-24 mt-8">
+      <div className="max-w-2xl relative top-48  left-24 ">
         
         {/* Recent Repositories Slider */}
         {repos.length > 0 && (
-          <div className="mt-6 bg-white p-6 rounded-lg shadow-sm border">
+          <div className="relative bottom-16 ">
             <h2 className="text-lg font-semibold mb-6 text-gray-700 text-center">
-              Latest Repositories
+            Recent Code Drops
             </h2>
 
             <div className="relative w-full h-40 overflow-hidden">
