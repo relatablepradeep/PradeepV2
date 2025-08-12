@@ -1,10 +1,16 @@
+import Github from '../Component/github/Github'
+import Repo from '../Component/github/Repo'
+ 
 export default function AboutMe(){
 
 
     return(
 
           <>
-    <div className="bg-white w-full min-h-screen">hiii</div>
+
+          <Repo/>
+   
+    <Github/>
     
     </>
 

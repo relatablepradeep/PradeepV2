@@ -1,32 +1,36 @@
-// app/api/github/route.ts
-import { NextResponse } from "next/server";
-
 export async function GET() {
   try {
     const token = process.env.GITHUB_TOKEN;
     if (!token) {
-      return NextResponse.json({ error: "Missing GITHUB_TOKEN" }, { status: 500 });
+      return new Response(JSON.stringify({ error: "Missing GITHUB_TOKEN" }), { status: 500 });
     }
 
-    // Fetch last 365 days (adjust -364 if you want inclusive day count)
     const today = new Date();
-    const endDate = new Date(Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate()));
-    const startDate = new Date(endDate);
-    startDate.setUTCDate(endDate.getUTCDate() - 364); // last 365 days
-
-    const from = startDate.toISOString().split("T")[0] + "T00:00:00Z";
-    const to = endDate.toISOString().split("T")[0] + "T23:59:59Z";
+    const start = new Date();
+    start.setDate(today.getDate() - 48); // last 49 days
 
     const query = `
       query {
         user(login: "relatablepradeep") {
-          contributionsCollection(from: "${from}", to: "${to}") {
+          contributionsCollection(from: "${start.toISOString()}", to: "${today.toISOString()}") {
             contributionCalendar {
               weeks {
                 contributionDays {
                   date
                   contributionCount
                 }
+              }
+            }
+          }
+          repositories(first: 3, orderBy: {field: UPDATED_AT, direction: DESC}) {
+            nodes {
+              name
+              description
+              url
+              updatedAt
+              primaryLanguage {
+                name
+                color
               }
             }
           }
@@ -44,17 +48,25 @@ export async function GET() {
     });
 
     if (!res.ok) {
-      const text = await res.text();
-      throw new Error(`GitHub API error: ${res.status} ${text}`);
+      return new Response(JSON.stringify({ error: "Failed to fetch from GitHub API" }), { status: res.status });
     }
 
-    const json = await res.json();
+    const data = await res.json();
 
-    const weeks = json?.data?.user?.contributionsCollection?.contributionCalendar?.weeks || [];
-    const days = weeks.flatMap((w: any) => w.contributionDays || []);
+    if (data.errors) {
+      return new Response(JSON.stringify({ error: data.errors }), { status: 500 });
+    }
 
-    return NextResponse.json(days);
-  } catch (err: any) {
-    return NextResponse.json({ error: err.message }, { status: 500 });
+    const weeks = data.data.user.contributionsCollection.contributionCalendar.weeks;
+    const days = weeks.flatMap((w: any) => w.contributionDays);
+
+    const repositories = data.data.user.repositories.nodes;
+
+    return new Response(
+      JSON.stringify({ contributions: days, repositories }),
+      { status: 200 }
+    );
+  } catch (err) {
+    return new Response(JSON.stringify({ error: (err as Error).message }), { status: 500 });
   }
 }

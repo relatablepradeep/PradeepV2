@@ -6,17 +6,27 @@ interface ContributionDay {
   contributionCount: number;
 }
 
+interface Repository {
+  name: string;
+  description: string | null;
+  url: string;
+  updatedAt: string;
+  primaryLanguage: {
+    name: string;
+    color: string;
+  } | null;
+}
+
 const weekdayNames = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
-export default function GithubStreak() {
+export default function Github() {
   const [data, setData] = useState<ContributionDay[]>([]);
   const [streak, setStreak] = useState(0);
   const [tooltip, setTooltip] = useState<{ date: string; x: number; y: number } | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
-  // For simplicity, I’m skipping the sample data and localStorage fallback here
-  // But you can keep it if you want!
+  const [repos, setRepos] = useState<Repository[]>([]);
+  const [currentIndex, setCurrentIndex] = useState(0); // ✅ Added for sliding effect
 
   useEffect(() => {
     async function fetchData() {
@@ -25,8 +35,9 @@ export default function GithubStreak() {
       try {
         const res = await fetch("/api/github");
         if (!res.ok) throw new Error("API request failed");
-        const days: ContributionDay[] = await res.json();
-        setData(days);
+        const json = await res.json();
+        setData(json.contributions || []);
+        setRepos(json.repositories || []);
       } catch (err) {
         setError("Failed to fetch data");
       } finally {
@@ -36,28 +47,32 @@ export default function GithubStreak() {
     fetchData();
   }, []);
 
- useEffect(() => {
-  if (data.length > 0) {
-    const last30 = data.slice(-30);
-    let count = 0;
-
-    // Start from the last day and move backward
-    for (let i = last30.length - 1; i >= 0; i--) {
-      if (last30[i].contributionCount > 0) {
-        count++;
-      } else {
-        // If we haven't counted any day yet (streak start), continue checking previous days
-        if (count === 0) {
-          continue; // skip zero contributions at the end (today or recent)
-        }
-        // Once streak started, break at first zero day
-        break;
-      }
+  // Auto-slide effect every 3 seconds
+  useEffect(() => {
+    if (repos.length > 1) {
+      const interval = setInterval(() => {
+        setCurrentIndex((prev) => (prev + 1) % repos.length);
+      }, 3000);
+      return () => clearInterval(interval);
     }
-    setStreak(count);
-  }
-}, [data]);
+  }, [repos]);
 
+  // Streak calculation
+  useEffect(() => {
+    if (data.length > 0) {
+      const last30 = data.slice(-30);
+      let count = 0;
+      for (let i = last30.length - 1; i >= 0; i--) {
+        if (last30[i].contributionCount > 0) {
+          count++;
+        } else {
+          if (count === 0) continue;
+          break;
+        }
+      }
+      setStreak(count);
+    }
+  }, [data]);
 
   const getContributionColor = (count: number) => {
     if (count === 0) return "bg-gray-200 hover:bg-gray-300";
@@ -78,15 +93,68 @@ export default function GithubStreak() {
 
   if (isLoading) return <div>Loading...</div>;
 
-  // Show only last 30 days for grid and tooltip
   const last30Days = data.slice(-30);
-
-  // Total contributions for all 365 days
   const totalContributions = data.reduce((sum, day) => sum + day.contributionCount, 0);
 
   return (
-    <div className="w-1/2 min-h-screen p-8 bg-gradient-to-br from-gray-50 to-gray-100 relative">
-      <div className="max-w-2xl">
+    <div className="fixed top-0 left-0 w-1/2 min-h-screen p-8 bg-gradient-to-br from-gray-50 to-gray-100">
+      <div className="max-w-2xl relative top-96 left-24 mt-8">
+        
+        {/* Recent Repositories Slider */}
+        {repos.length > 0 && (
+          <div className="mt-6 bg-white p-6 rounded-lg shadow-sm border">
+            <h2 className="text-lg font-semibold mb-6 text-gray-700 text-center">
+              Latest Repositories
+            </h2>
+
+            <div className="relative w-full h-40 overflow-hidden">
+              {repos.map((repo, index) => (
+                <div
+                  key={repo.name}
+                  className="absolute w-full transition-transform duration-700 ease-in-out"
+                  style={{
+                    transform: `translateY(${(index - currentIndex) * 100}%)`,
+                    opacity: index === currentIndex ? 1 : 0,
+                    transition: "transform 0.7s ease-in-out, opacity 0.7s ease-in-out",
+                  }}
+                >
+                  <div className="w-60 mx-auto bg-gradient-to-br from-blue-50 to-indigo-100 p-4 rounded-xl border-2 border-blue-200 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
+                    <a
+                      href={repo.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-700 hover:text-blue-900 font-semibold text-sm line-clamp-1 block mb-2"
+                    >
+                      {repo.name}
+                    </a>
+
+                    {repo.description && (
+                      <p className="text-xs text-gray-600 mb-2 line-clamp-2 leading-tight">
+                        {repo.description}
+                      </p>
+                    )}
+
+                    {repo.primaryLanguage && (
+                      <div className="flex justify-start">
+                        <span
+                          className="inline-block px-2 py-1 text-xs rounded-full font-medium"
+                          style={{
+                            backgroundColor: repo.primaryLanguage.color || "#6B7280",
+                            color: "white",
+                            fontSize: "10px",
+                          }}
+                        >
+                          {repo.primaryLanguage.name}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
         {error && (
           <div className="mb-4 p-3 bg-yellow-100 border border-yellow-300 rounded text-yellow-800 text-sm">
             {error}
@@ -94,7 +162,7 @@ export default function GithubStreak() {
         )}
 
         {/* Legend */}
-        <div className="flex items-center gap-4 mb-6 text-sm text-gray-600">
+        <div className="flex items-center space-x-5 p-6 text-sm text-gray-600">
           <span>Less</span>
           <div className="flex gap-1">
             <div className="w-3 h-3 bg-gray-200 rounded-sm"></div>
@@ -118,7 +186,7 @@ export default function GithubStreak() {
           ))}
         </div>
 
-        {/* Contribution grid - last 30 days only */}
+        {/* Contribution grid */}
         <div className="grid grid-cols-7 gap-2 p-4 bg-white rounded-xl shadow-sm border">
           {last30Days.map((day) => (
             <div
