@@ -1,5 +1,3 @@
-
-
 'use client';
 
 import Image from 'next/image';
@@ -8,7 +6,7 @@ import Flag from 'react-world-flags';
 import Typing from '@/app/Animation/Typing/Typing';
 import { Mail, MapPin, Code } from 'lucide-react';
 import { useState } from 'react';
-import Social from '../Component/Social/Social'
+import Social from '../Component/Social/Social';
 
 export default function MyHome() {
   const [copied, setCopied] = useState(false);
@@ -24,84 +22,102 @@ export default function MyHome() {
   };
 
   return (
-    <main className="fixed top-0 left-0 w-1/2 h-screen">
+    // Hidden on mobile, visible from md (tablet) upwards
+    <main className="fixed top-0 left-0 md:w-1/2 w-full h-screen hidden md:block">
       <section className="w-full h-full bg-amber-50 flex justify-center items-center">
         <div>
-          {/* Bottom-right notification */}
+          {/* Notification */}
           {copied && (
             <div className="fixed bottom-4 right-4 bg-green-600 text-white px-4 py-2 rounded shadow-lg transition-opacity duration-300 z-50">
               Email copied!
             </div>
           )}
 
-          <span className="text-black flex justify-center items-center lg:relative lg:bottom-60">
+          {/* Image + Flag + Name */}
+          <span className="
+            text-black flex justify-center items-center 
+            lg:relative lg:bottom-60 
+            md:relative md:bottom-32
+          ">
             <div className="flex justify-end">
-              <Flag code="IN" className="lg:w-20 z-10 relative right-36 bottom-8" />
-
+              <Flag
+                code="IN"
+                className="
+                  z-10 
+                  lg:w-20 lg:right-36
+                  md:w-16 md:right-24
+                  relative bottom-8
+                "
+              />
               <Image
                 src={Photo}
                 width={250}
                 height={250}
                 alt="Picture of the author"
-                className="rounded-full z-5 relative right-56 top-16"
+                className="
+                  rounded-full z-5 
+                  lg:right-56 lg:top-16
+                  md:right-36 md:top-12
+                  relative
+                "
               />
             </div>
 
-            <div className="flex relative right-48 top-24 text-6xl font-bold">
+            <div className="
+              flex font-bold 
+              lg:right-48 lg:top-24 lg:text-6xl
+              md:right-28 md:top-16 md:text-5xl
+              relative
+            ">
               Pradeep!
             </div>
 
-            <button className=" absolute mt-80">
+            <button className="
+              absolute
+              lg:mt-80
+              md:mt-64
+            ">
               <Typing />
             </button>
           </span>
-
-         
         </div>
 
-
-
-         <div className="absolute   left-14 space-y-4 mt-20 text-xl  ">
-
-            <div className="text-lg font-semibold text-gray-800 flex items-center space-x-2">
-              <Code className="w-4 h-4" />
-              <span>Freelancer</span>
-            </div>
-
-            <div className="flex items-center text-gray-700 space-x-2">
-              <MapPin className="w-4 h-4" />
-              <span>Uttarakhand</span>
-            </div>
-
-           
-            <div className="flex items-center space-x-2">
-              <Mail
-                className="w-4 h-4 text-blue-600 cursor-pointer hover:scale-110 transition"
-                title="Open email app"
-                onClick={handleEmailAppRedirect}
-              />
-              <span
-                onClick={handleEmailClick}
-                className="text-blue-600 cursor-pointer hover:underline"
-                title="Click to copy email"
-              >
-                okiepradeep@gmail.com
-              </span>
-            </div>
+        {/* Info Section */}
+        <div className="
+          absolute 
+          lg:left-14 lg:space-y-4 lg:mt-20 lg:text-xl
+          md:left-10 md:space-y-3 md:mt-14 md:text-lg
+        ">
+          <div className="font-semibold text-gray-800 flex items-center space-x-2">
+            <Code className="w-4 h-4" />
+            <span>Freelancer</span>
           </div>
 
-
-
-          <div className=" fixed bottom-1    ">
-
-
-            <Social/>
+          <div className="flex items-center text-gray-700 space-x-2">
+            <MapPin className="w-4 h-4" />
+            <span>Uttarakhand</span>
           </div>
 
+          <div className="flex items-center space-x-2">
+            <Mail
+              className="w-4 h-4 text-blue-600 cursor-pointer hover:scale-110 transition"
+              title="Open email app"
+              onClick={handleEmailAppRedirect}
+            />
+            <span
+              onClick={handleEmailClick}
+              className="text-blue-600 cursor-pointer hover:underline"
+              title="Click to copy email"
+            >
+              okiepradeep@gmail.com
+            </span>
+          </div>
+        </div>
 
-
-
-
+        {/* Social */}
+        <div className="fixed bottom-1">
+          <Social />
+        </div>
       </section>
     </main>
   );

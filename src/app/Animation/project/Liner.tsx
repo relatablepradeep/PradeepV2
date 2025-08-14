@@ -3,6 +3,8 @@
 import React, { useState, useEffect } from 'react';
 import { Github, ExternalLink, ArrowUpRight } from 'lucide-react';
 
+
+
 const ProjectCard = ({ project, isExpanded, onToggle, isHidden, index }) => {
   const [isVisible, setIsVisible] = useState(false);
 
@@ -13,14 +15,13 @@ const ProjectCard = ({ project, isExpanded, onToggle, isHidden, index }) => {
     return () => clearTimeout(timer);
   }, [index]);
 
-  // Direction based on index for entrance animation
   const getEntranceDirection = (index) => {
     const directions = ['left', 'right', 'top', 'bottom'];
     return directions[index % 4];
   };
 
   const direction = getEntranceDirection(index);
-  
+
   const entranceClass = {
     left: 'translate-x-[-100%]',
     right: 'translate-x-[100%]',
@@ -40,11 +41,11 @@ const ProjectCard = ({ project, isExpanded, onToggle, isHidden, index }) => {
     <div className={`mb-6 transition-all duration-700 ease-out transform ${
       isVisible ? `opacity-100 ${visibleClass}` : `opacity-0 ${entranceClass[direction]}`
     } ${isExpanded ? 'scale-105' : 'scale-100'}`}>
-      
+
       {/* Header Section */}
       <div className="p-4">
         <div className="flex items-center justify-between">
-          <h2 
+          <h2
             className={`text-xl font-semibold text-gray-800 cursor-pointer transition-all duration-500 ease-out transform ${
               isExpanded ? 'opacity-0 scale-75' : 'hover:text-blue-600'
             }`}
@@ -55,42 +56,39 @@ const ProjectCard = ({ project, isExpanded, onToggle, isHidden, index }) => {
           <div className={`flex items-center gap-3 transition-all duration-500 ease-out transform ${
             isExpanded ? 'opacity-0 scale-75' : 'opacity-100 scale-100'
           }`}>
-            <a 
-              href={project.githubUrl} 
-              target="_blank" 
+            <a
+              href={project.githubUrl}
+              target="_blank"
               rel="noopener noreferrer"
               className="p-2 hover:bg-gray-100 rounded-full transition-all duration-300 transform hover:scale-110"
             >
               <Github size={20} className="text-gray-600 hover:text-gray-800 transition-all duration-300" />
             </a>
-            <a 
-              href={project.liveUrl} 
-              target="_blank" 
+            <a
+              href={project.liveUrl}
+              target="_blank"
               rel="noopener noreferrer"
               className="p-2 hover:bg-gray-100 rounded-full transition-all duration-300 transform hover:scale-110"
             >
               <ExternalLink size={20} className="text-gray-600 hover:text-gray-800 transition-all duration-300" />
             </a>
-            <ArrowUpRight 
-              size={20} 
+            <ArrowUpRight
+              size={20}
               className="text-gray-400 transition-all duration-500 ease-out transform hover:text-blue-500 hover:scale-110"
             />
           </div>
         </div>
-        
-        {/* Line from Project name to Live preview icon */}
+
         <div className={`mt-2 h-px bg-gradient-to-r from-gray-300 to-transparent transition-all duration-500 ${
           isExpanded ? 'opacity-0' : 'opacity-100'
         }`}></div>
       </div>
 
-      {/* Expanded Content */}
       {isExpanded && (
         <div className="px-4 pb-4">
           <div className="mt-2 relative">
-            {/* Moving border effect */}
             <div className="absolute -inset-[3px] rounded-xl">
-              <div className="absolute inset-0 rounded-xl opacity-90" 
+              <div className="absolute inset-0 rounded-xl opacity-90"
                    style={{
                      background: 'linear-gradient(90deg, #ff0000, #ff8000, #ffff00, #80ff00, #00ff00, #00ff80, #00ffff, #0080ff, #0000ff, #8000ff, #ff00ff, #ff0080, #ff0000)',
                      backgroundSize: '400% 400%',
@@ -98,38 +96,29 @@ const ProjectCard = ({ project, isExpanded, onToggle, isHidden, index }) => {
                    }}>
               </div>
             </div>
-            
+
             <style dangerouslySetInnerHTML={{__html: `
               @keyframes rainbowMove {
                 0% { background-position: 0% 50%; }
                 100% { background-position: 100% 50%; }
               }
             `}} />
-            
-            {/* Main content box */}
+
             <div className="relative bg-white rounded-xl shadow-lg border border-gray-200 p-8">
-              
-              {/* Project Emoji/Symbol */}
               <div className="text-center mb-6">
                 <span className="text-6xl">{project.emoji}</span>
               </div>
-              
-              {/* Project Name */}
               <h3 className="text-2xl font-bold text-gray-800 text-center mb-4">
                 {project.name}
               </h3>
-              
-              {/* Brief Overview */}
               <p className="text-gray-600 text-center leading-relaxed mb-6">
                 {project.overview}
               </p>
-              
-              {/* Tech Stack */}
               <div className="mb-8">
                 <div className="flex flex-wrap gap-2 justify-center">
                   {project.techStack.map((tech, index) => (
-                    <span 
-                      key={index} 
+                    <span
+                      key={index}
                       className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm font-medium"
                     >
                       {tech}
@@ -137,22 +126,19 @@ const ProjectCard = ({ project, isExpanded, onToggle, isHidden, index }) => {
                   ))}
                 </div>
               </div>
-              
-              {/* Action Buttons */}
               <div className="flex justify-end gap-4">
-                <a 
-                  href={project.liveUrl} 
-                  target="_blank" 
+                <a
+                  href={project.liveUrl}
+                  target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg transition-all duration-300 transform hover:bg-blue-700 hover:scale-105"
                 >
                   <span className="text-lg">🌐</span>
                   <span className="font-medium">Website</span>
                 </a>
-                
-                <a 
-                  href={project.githubUrl} 
-                  target="_blank" 
+                <a
+                  href={project.githubUrl}
+                  target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-2 px-6 py-3 bg-gray-800 text-white rounded-lg transition-all duration-300 transform hover:bg-gray-700 hover:scale-105"
                 >
@@ -171,7 +157,6 @@ const ProjectCard = ({ project, isExpanded, onToggle, isHidden, index }) => {
 const Liner = () => {
   const [expandedProject, setExpandedProject] = useState(null);
 
-  // Sample project data - replace with your actual projects
   const projects = [
     {
       id: 1,
@@ -216,10 +201,8 @@ const Liner = () => {
   };
 
   return (
-    // <div className="min-h-screen  py-8">
-      <div className="max-w-4xl mx-auto   px-4">
-       
-        
+    <div className="hidden md:block">
+      <div className="max-w-4xl mx-auto px-4">
         <div className="space-y-4">
           {projects.map((project, index) => (
             <ProjectCard
@@ -232,7 +215,6 @@ const Liner = () => {
             />
           ))}
         </div>
-        
         {expandedProject && (
           <div className="text-center mt-6 animate-in fade-in slide-in-from-bottom duration-500">
             <button
@@ -244,7 +226,7 @@ const Liner = () => {
           </div>
         )}
       </div>
-    // </div>
+    </div>
   );
 };
 

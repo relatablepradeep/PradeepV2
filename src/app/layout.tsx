@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Nav from "./Component/Header/Nav";
 import Email from "./Home/Email";
+import Mob_Nav from "./Component/Component/Nav/Mob_Nav";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -33,6 +34,8 @@ export default function RootLayout({
         <Nav/>
         <Email/>
         {children}
+
+        <Mob_Nav/>
       </body>
     </html>
   );

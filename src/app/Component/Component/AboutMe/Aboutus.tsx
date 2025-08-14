@@ -20,7 +20,7 @@ interface Repository {
 
 const weekdayNames = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
-export default function Github() {
+export default function Aboutus() {
   const [data, setData] = useState<ContributionDay[]>([]);
   const [streak, setStreak] = useState(0);
   const [tooltip, setTooltip] = useState<{ date: string; x: number; y: number } | null>(null);
@@ -39,7 +39,7 @@ export default function Github() {
         const json = await res.json();
         setData(json.contributions || []);
         setRepos(json.repositories || []);
-      } catch {
+      } catch (err) {
         setError("Failed to fetch data");
       } finally {
         setIsLoading(false);
@@ -50,10 +50,9 @@ export default function Github() {
 
   useEffect(() => {
     if (repos.length > 1) {
-      const interval = setInterval(
-        () => setCurrentIndex((prev) => (prev + 1) % repos.length),
-        3000
-      );
+      const interval = setInterval(() => {
+        setCurrentIndex((prev) => (prev + 1) % repos.length);
+      }, 3000);
       return () => clearInterval(interval);
     }
   }, [repos]);
@@ -82,96 +81,85 @@ export default function Github() {
     return "bg-green-800 hover:bg-green-900";
   };
 
-  const formatDate = (dateStr: string) =>
-    new Date(dateStr).toLocaleDateString("en-US", {
+  const formatDate = (dateStr: string) => {
+    const date = new Date(dateStr);
+    return date.toLocaleDateString("en-US", {
       weekday: "short",
       month: "short",
       day: "numeric",
     });
+  };
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <div className="text-center py-10">Loading...</div>;
 
   const last30Days = data.slice(-30);
   const totalContributions = data.reduce((sum, day) => sum + day.contributionCount, 0);
 
   return (
-    // Hidden on mobile, visible on tablet, iPad, and HP Victus
-    <div className="hidden md:block fixed top-0 left-0 w-1/2 min-h-screen p-8 bg-gradient-to-br from-gray-50 to-gray-100">
-      <div className="max-w-2xl relative top-48 left-24">
+    <div className="w-full  p-4 sm:p-8 bg-gradient-to-br from-gray-50 to-gray-100 flex justify-center">
+      <div className="max-w-lg w-full space-y-8">
         {repos.length > 0 && (
-          <div className="relative bottom-10">
-            <h2 className="text-lg font-semibold mb-6 text-gray-700 text-center">
+          <div>
+            <h2 className="text-lg font-semibold mb-4 text-gray-700 text-center">
               Recent Code Drops
             </h2>
-            <div className="relative flex left-24">
-              <div className="relative w-full h-40 overflow-hidden">
-                <a
-                  href="https://github.com/relatablepradeep"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="absolute top-1/2 left-15 -translate-x-1/2 -translate-y-1/2
-                             flex items-center justify-center
-                             w-25 h-25 border-2 rounded-full
-                             bg-gray-200 text-gray-700
-                             transition-all duration-300
-                             hover:bg-blue-950 hover:text-white hover:scale-110
-                             cursor-pointer shadow-md hover:shadow-lg z-[9999]"
+            <div className="relative w-full h-48 overflow-hidden">
+              <a
+                href="https://github.com/relatablepradeep"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="absolute top-2 right-2 flex items-center justify-center w-14 h-14 border-2 rounded-full bg-gray-200 text-gray-700 transition-all duration-300 hover:bg-blue-950 hover:text-white hover:scale-110 cursor-pointer shadow-md hover:shadow-lg z-50"
+              >
+                <FaGithub className="text-3xl" />
+              </a>
+              {repos.map((repo, index) => (
+                <div
+                  key={repo.name}
+                  className="absolute w-full transition-transform duration-700 ease-in-out"
+                  style={{
+                    transform: `translateY(${(index - currentIndex) * 100}%)`,
+                    opacity: index === currentIndex ? 1 : 0,
+                  }}
                 >
-                  <FaGithub className="text-6xl" />
-                </a>
-
-                {repos.map((repo, index) => (
-                  <div
-                    key={repo.name}
-                    className="absolute w-full transition-transform duration-700 ease-in-out mt-5"
-                    style={{
-                      transform: `translateY(${(index - currentIndex) * 100}%)`,
-                      opacity: index === currentIndex ? 1 : 0,
-                    }}
-                  >
-                    <div className="w-80 mx-auto bg-gradient-to-br from-blue-50 to-indigo-100 p-6 rounded-xl border-2 border-blue-200 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
-                      <a
-                        href={repo.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-blue-700 hover:text-blue-900 font-semibold text-sm line-clamp-1 block mb-2"
+                  <div className="mx-auto bg-gradient-to-br from-blue-50 to-indigo-100 p-4 rounded-xl border-2 border-blue-200 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 max-w-xs">
+                    <a
+                      href={repo.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-700 hover:text-blue-900 font-semibold text-sm line-clamp-1 block mb-2"
+                    >
+                      {repo.name}
+                    </a>
+                    {repo.description && (
+                      <p className="text-xs text-gray-600 mb-2 line-clamp-2 leading-tight">
+                        {repo.description}
+                      </p>
+                    )}
+                    {repo.primaryLanguage && (
+                      <span
+                        className="inline-block px-2 py-1 text-xs rounded-full font-medium"
+                        style={{
+                          backgroundColor: repo.primaryLanguage.color || "#6B7280",
+                          color: "white",
+                        }}
                       >
-                        {repo.name}
-                      </a>
-                      {repo.description && (
-                        <p className="text-xs text-gray-600 mb-2 line-clamp-2 leading-tight">
-                          {repo.description}
-                        </p>
-                      )}
-                      {repo.primaryLanguage && (
-                        <div className="flex justify-start">
-                          <span
-                            className="inline-block px-2 py-1 text-xs rounded-full font-medium"
-                            style={{
-                              backgroundColor: repo.primaryLanguage.color || "#6B7280",
-                              color: "white",
-                              fontSize: "10px",
-                            }}
-                          >
-                            {repo.primaryLanguage.name}
-                          </span>
-                        </div>
-                      )}
-                    </div>
+                        {repo.primaryLanguage.name}
+                      </span>
+                    )}
                   </div>
-                ))}
-              </div>
+                </div>
+              ))}
             </div>
           </div>
         )}
 
         {error && (
-          <div className="mb-4 p-3 bg-yellow-100 border border-yellow-300 rounded text-yellow-800 text-sm">
+          <div className="p-3 bg-yellow-100 border border-yellow-300 rounded text-yellow-800 text-sm">
             {error}
           </div>
         )}
 
-        <div className="flex items-center space-x-5 p-6 text-sm text-gray-600">
+        <div className="flex items-center justify-center space-x-2 text-sm text-gray-600">
           <span>Less</span>
           <div className="flex gap-1">
             <div className="w-3 h-3 bg-gray-200 rounded-sm"></div>
@@ -183,18 +171,18 @@ export default function Github() {
           <span>More</span>
         </div>
 
-        <div className="grid grid-cols-7 gap-2 mb-2">
+        <div className="grid grid-cols-7 gap-1 sm:gap-2">
           {weekdayNames.map((day) => (
             <div
               key={day}
-              className="text-center font-medium text-sm text-gray-500 h-6 flex items-center justify-center"
+              className="text-center font-medium text-xs sm:text-sm text-gray-500 h-6 flex items-center justify-center"
             >
               {day}
             </div>
           ))}
         </div>
 
-        <div className="grid grid-cols-7 gap-2 p-4 bg-white rounded-xl shadow-sm border">
+        <div className="grid grid-cols-7 gap-1 sm:gap-2 p-4 bg-white rounded-xl shadow-sm border">
           {last30Days.map((day) => (
             <div
               key={day.date}
@@ -209,21 +197,27 @@ export default function Github() {
                 });
               }}
               onMouseLeave={() => setTooltip(null)}
-              className={`w-8 h-8 rounded-md cursor-pointer transition-all duration-200 border border-gray-100 ${getContributionColor(
+              className={`w-6 h-6 sm:w-8 sm:h-8 rounded-md cursor-pointer transition-all duration-200 border border-gray-100 ${getContributionColor(
                 day.contributionCount
               )} transform hover:scale-110 hover:shadow-sm`}
             />
           ))}
         </div>
 
-        <div className="mt-6 grid grid-cols-2 gap-4">
-          <div className="bg-white p-4 rounded-lg shadow-sm border">
-            <div className="text-2xl font-bold text-blue-600">{totalContributions}</div>
-            <div className="text-sm text-gray-500">Total contributions (last 365 days)</div>
+        <div className="grid grid-cols-2 gap-4">
+          <div className="bg-white p-4 rounded-lg shadow-sm border text-center">
+            <div className="text-lg sm:text-2xl font-bold text-blue-600">
+              {totalContributions}
+            </div>
+            <div className="text-xs sm:text-sm text-gray-500">
+              Total contributions (last 365 days)
+            </div>
           </div>
-          <div className="bg-white p-4 rounded-lg shadow-sm border">
-            <div className="text-2xl font-bold text-green-600">{streak}</div>
-            <div className="text-sm text-gray-500">Current 30-day contribution streak</div>
+          <div className="bg-white p-4 rounded-lg shadow-sm border text-center">
+            <div className="text-lg sm:text-2xl font-bold text-green-600">{streak}</div>
+            <div className="text-xs sm:text-sm text-gray-500">
+              Current 30-day contribution streak
+            </div>
           </div>
         </div>
 
