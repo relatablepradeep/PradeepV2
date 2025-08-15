@@ -1,6 +1,6 @@
 'use client'
 
-import Animation from "@/app/Animation/Spline"
+import Animation from "../../../Animation/models/spline"
 import { useState } from "react"
 import axios from "axios";
 

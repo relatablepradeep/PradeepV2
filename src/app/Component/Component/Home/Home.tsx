@@ -2,9 +2,9 @@ import Image from "next/image";
 
 export default function Myhome() {
   return (
-    <main className="bg-white">
+    <main className="bg-white block sm:hidden">
       {/* Background image */}
-      <div className="relative w-full h-50 sm:hidden">
+      <div className="relative w-full h-50">
         <Image
           src="/Home.jpg"
           alt="Home"

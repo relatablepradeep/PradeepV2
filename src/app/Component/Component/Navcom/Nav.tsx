@@ -1,5 +1,9 @@
 'use client';
 
+
+import Aboutus from "../AboutMe/Aboutus";
+import Connect from '../Connect/Connect'
+
 import { useState } from "react";
 
 const AboutMe = () => (
@@ -62,53 +66,53 @@ const Blog = () => (
   </div>
 );
 
-const Connect = () => (
-  <div className="p-6 bg-gradient-to-br from-purple-50 to-pink-100 rounded-lg shadow-sm">
-    <h2 className="text-2xl font-bold text-gray-800 mb-4">Connect</h2>
-    <div className="space-y-6">
-      <p className="text-gray-700 leading-relaxed">
-        I'd love to hear from you! Whether you want to collaborate on a project,
-        discuss opportunities, or just say hello, feel free to reach out.
-      </p>
+// const Connect = () => (
+//   <div className="p-6 bg-gradient-to-br from-purple-50 to-pink-100 rounded-lg shadow-sm">
+//     <h2 className="text-2xl font-bold text-gray-800 mb-4">Connect</h2>
+//     <div className="space-y-6">
+//       <p className="text-gray-700 leading-relaxed">
+//         I'd love to hear from you! Whether you want to collaborate on a project,
+//         discuss opportunities, or just say hello, feel free to reach out.
+//       </p>
 
-      <div className="grid gap-4">
-        {[
-          { platform: "Email", handle: "hello@example.com", color: "bg-red-500" },
-          { platform: "LinkedIn", handle: "/in/yourprofile", color: "bg-blue-600" },
-          { platform: "Twitter", handle: "@yourusername", color: "bg-sky-500" },
-          { platform: "GitHub", handle: "/yourusername", color: "bg-gray-800" }
-        ].map((contact, index) => (
-          <div key={index} className="bg-white p-4 rounded-lg shadow-sm flex items-center space-x-3 hover:shadow-md transition-shadow">
-            <div className={`w-3 h-3 rounded-full ${contact.color}`}></div>
-            <div>
-              <h4 className="font-semibold text-gray-800">{contact.platform}</h4>
-              <p className="text-gray-600 text-sm">{contact.handle}</p>
-            </div>
-          </div>
-        ))}
-      </div>
+//       <div className="grid gap-4">
+//         {[
+//           { platform: "Email", handle: "hello@example.com", color: "bg-red-500" },
+//           { platform: "LinkedIn", handle: "/in/yourprofile", color: "bg-blue-600" },
+//           { platform: "Twitter", handle: "@yourusername", color: "bg-sky-500" },
+//           { platform: "GitHub", handle: "/yourusername", color: "bg-gray-800" }
+//         ].map((contact, index) => (
+//           <div key={index} className="bg-white p-4 rounded-lg shadow-sm flex items-center space-x-3 hover:shadow-md transition-shadow">
+//             <div className={`w-3 h-3 rounded-full ${contact.color}`}></div>
+//             <div>
+//               <h4 className="font-semibold text-gray-800">{contact.platform}</h4>
+//               <p className="text-gray-600 text-sm">{contact.handle}</p>
+//             </div>
+//           </div>
+//         ))}
+//       </div>
 
-      <div className="bg-white p-4 rounded-lg shadow-sm">
-        <h3 className="font-semibold text-gray-800 mb-3">Quick Message</h3>
-        <div className="space-y-3">
-          <input
-            type="text"
-            placeholder="Your name"
-            className="w-full p-3 border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-          />
-          <textarea
-            placeholder="Your message"
-            rows="3"
-            className="w-full p-3 border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-none"
-          ></textarea>
-          <button className="w-full bg-purple-600 text-white py-3 rounded-md hover:bg-purple-700 transition-colors font-medium">
-            Send Message
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-);
+//       <div className="bg-white p-4 rounded-lg shadow-sm">
+//         <h3 className="font-semibold text-gray-800 mb-3">Quick Message</h3>
+//         <div className="space-y-3">
+//           <input
+//             type="text"
+//             placeholder="Your name"
+//             className="w-full p-3 border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+//           />
+//           <textarea
+//             placeholder="Your message"
+//             rows="3"
+//             className="w-full p-3 border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-none"
+//           ></textarea>
+//           <button className="w-full bg-purple-600 text-white py-3 rounded-md hover:bg-purple-700 transition-colors font-medium">
+//             Send Message
+//           </button>
+//         </div>
+//       </div>
+//     </div>
+//   </div>
+// );
 
 export default function Nav() {
   const [activeTab, setActiveTab] = useState("About Me");
@@ -116,16 +120,21 @@ export default function Nav() {
 
   const renderContent = () => {
     switch (activeTab) {
-      case "About Me": return <AboutMe />;
-      case "Blog": return <Blog />;
-      case "Connect": return <Connect />;
-      default: return <AboutMe />;
+      case "About Me":
+        return <Aboutus />;
+      case "Blog":
+        return <Blog />;
+      case "Connect":
+        return <Connect />;
+      default:
+        return <Aboutus />;
     }
   };
 
   return (
-    <div className="bg-white w-full relative bottom-28">
-      <nav className="bg-white border-b border-gray-200 py-3 px-3 ">
+    <div className="block md:hidden bg-white w-full relative bottom-28">
+      {/* Tabs navigation */}
+      <nav className="bg-white border-b border-gray-200 py-3 px-3">
         <div className="flex justify-center">
           <div className="flex space-x-14 relative">
             {tabs.map((tab) => (
@@ -148,9 +157,8 @@ export default function Nav() {
         </div>
       </nav>
 
-      <main className="p-4">
-        {renderContent()}
-      </main>
+      {/* Content */}
+      <main className="p-4">{renderContent()}</main>
     </div>
   );
 }

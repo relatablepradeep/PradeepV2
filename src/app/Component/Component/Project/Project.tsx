@@ -48,7 +48,7 @@ const Project = () => {
   ];
 
   return (
-    <div className="relative bottom-5 bg-white">
+    <div className="relative bottom-5 bg-white block sm:hidden">
       
       {/* Header Row */}
       <div className="flex justify-between items-center px-5 mb-3 ">

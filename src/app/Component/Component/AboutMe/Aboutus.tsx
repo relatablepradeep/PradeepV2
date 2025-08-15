@@ -29,6 +29,7 @@ export default function Aboutus() {
   const [repos, setRepos] = useState<Repository[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
 
+  // Fetch contributions and repositories
   useEffect(() => {
     async function fetchData() {
       setIsLoading(true);
@@ -48,6 +49,7 @@ export default function Aboutus() {
     fetchData();
   }, []);
 
+  // Repository vertical slider
   useEffect(() => {
     if (repos.length > 1) {
       const interval = setInterval(() => {
@@ -57,17 +59,14 @@ export default function Aboutus() {
     }
   }, [repos]);
 
+  // Calculate 30-day streak
   useEffect(() => {
     if (data.length > 0) {
       const last30 = data.slice(-30);
       let count = 0;
       for (let i = last30.length - 1; i >= 0; i--) {
-        if (last30[i].contributionCount > 0) {
-          count++;
-        } else {
-          if (count === 0) continue;
-          break;
-        }
+        if (last30[i].contributionCount > 0) count++;
+        else if (count !== 0) break;
       }
       setStreak(count);
     }
@@ -96,14 +95,18 @@ export default function Aboutus() {
   const totalContributions = data.reduce((sum, day) => sum + day.contributionCount, 0);
 
   return (
-    <div className="w-full  p-4 sm:p-8 bg-gradient-to-br from-gray-50 to-gray-100 flex justify-center">
+    <div className="w-full p-4 sm:p-8 bg-gradient-to-br from-gray-50 to-gray-100 flex justify-center">
       <div className="max-w-lg w-full space-y-8">
+
+        {/* Repositories Slider */}
         {repos.length > 0 && (
           <div>
             <h2 className="text-lg font-semibold mb-4 text-gray-700 text-center">
               Recent Code Drops
             </h2>
             <div className="relative w-full h-48 overflow-hidden">
+
+              {/* GitHub Link */}
               <a
                 href="https://github.com/relatablepradeep"
                 target="_blank"
@@ -112,6 +115,8 @@ export default function Aboutus() {
               >
                 <FaGithub className="text-3xl" />
               </a>
+
+              {/* Sliding repository cards */}
               {repos.map((repo, index) => (
                 <div
                   key={repo.name}
@@ -153,12 +158,14 @@ export default function Aboutus() {
           </div>
         )}
 
+        {/* Error */}
         {error && (
           <div className="p-3 bg-yellow-100 border border-yellow-300 rounded text-yellow-800 text-sm">
             {error}
           </div>
         )}
 
+        {/* Contribution Legend */}
         <div className="flex items-center justify-center space-x-2 text-sm text-gray-600">
           <span>Less</span>
           <div className="flex gap-1">
@@ -171,6 +178,7 @@ export default function Aboutus() {
           <span>More</span>
         </div>
 
+        {/* Weekday Labels */}
         <div className="grid grid-cols-7 gap-1 sm:gap-2">
           {weekdayNames.map((day) => (
             <div
@@ -182,6 +190,7 @@ export default function Aboutus() {
           ))}
         </div>
 
+        {/* Contribution Grid */}
         <div className="grid grid-cols-7 gap-1 sm:gap-2 p-4 bg-white rounded-xl shadow-sm border">
           {last30Days.map((day) => (
             <div
@@ -204,6 +213,7 @@ export default function Aboutus() {
           ))}
         </div>
 
+        {/* Stats */}
         <div className="grid grid-cols-2 gap-4">
           <div className="bg-white p-4 rounded-lg shadow-sm border text-center">
             <div className="text-lg sm:text-2xl font-bold text-blue-600">
@@ -221,6 +231,7 @@ export default function Aboutus() {
           </div>
         </div>
 
+        {/* Tooltip */}
         {tooltip && (
           <div
             style={{
