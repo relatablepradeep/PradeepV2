@@ -35,6 +35,7 @@ export default function RootLayout({
         <Email/>
         {children}
 
+
         <Mob_Nav/>
       </body>
     </html>
