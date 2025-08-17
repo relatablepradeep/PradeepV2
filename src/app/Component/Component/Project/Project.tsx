@@ -48,36 +48,35 @@ const Project = () => {
   ];
 
   return (
-    <div className="relative bottom-5 bg-white block sm:hidden">
+    <div className="relative bg-white block sm:hidden ">
       
       {/* Header Row */}
-      <div className="flex justify-between items-center px-5 mb-3 ">
+      <div className="flex justify-between items-center px-5 ">
         <h1 className="text-black font-bold text-xl">My work</h1>
         <h1 className="text-blue-500 text-sm cursor-pointer">See All</h1>
       </div>
 
       {/* Slider */}
       <div 
-        className="flex overflow-x-auto scrollbar-hide snap-x snap-mandatory gap-4 px-5 mb-16 relative bottom-5 "
+        className="flex overflow-x-auto scrollbar-hide snap-x snap-mandatory gap-4 px-5"
         style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
       >
         {projects.map((project) => (
           <div 
             key={project.id} 
-            className="min-w-[280px] w-[280px] flex-shrink-0 snap-start  p-4 rounded-lg shadow"
+            className="min-w-[280px] w-[280px] flex-shrink-0 snap-start p-4 rounded-lg shadow"
           >
             {/* Project Image */}
             <div className="relative overflow-hidden rounded-xl mb-3 shadow-lg">
               <img 
                 src={project.image} 
                 alt={project.name}
-                className="w-full h-40 object-cover transition-transform duration-300 hover:scale-105"
+                className="w-full h-35 object-cover transition-transform duration-300 hover:scale-105"
               />
             </div>
 
-            {/* Tech Stack */}
             <div className="mb-2">
-              <div className="flex space-x-2 overflow-x-auto scrollbar-hide">
+              <div className="flex space-x-3 overflow-hidden scrollbar-hide">
                 {project.techStack.map((tech, i) => (
                   <span
                     key={i}
@@ -90,7 +89,7 @@ const Project = () => {
             </div>
 
             {/* Project Name */}
-            <h3 className="text-black text-lg font-bold mb-3">
+            <h3 className="text-black text-lg font-bold ">
               {project.name}
             </h3>
 
@@ -98,6 +97,8 @@ const Project = () => {
             <div className="flex gap-3 items-center">
               <a 
                 href={project.liveUrl}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white py-2 px-3 rounded-lg font-medium transition-all duration-300 flex items-center gap-2 shadow-lg text-sm"
               >
                 <ExternalLink size={14} />
@@ -106,6 +107,8 @@ const Project = () => {
               
               <a 
                 href={project.githubUrl}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="bg-gray-700 hover:bg-gray-600 text-white py-2 px-3 rounded-lg transition-all duration-300 flex items-center justify-center shadow-lg"
               >
                 <Github size={16} />
