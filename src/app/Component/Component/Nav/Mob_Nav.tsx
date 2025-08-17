@@ -22,7 +22,7 @@ export default function Mob_Nav() {
 
         {/* Contact */}
         <li className="flex flex-col items-center text-gray-600 hover:text-blue-500 transition">
-          <Link href="/contact" className="flex flex-col items-center">
+          <Link href="/Contact" className="flex flex-col items-center">
             <Image src="/conversation.svg" alt="Contact" width={24} height={24} />
             <span className="text-xs">Contact</span>
           </Link>
@@ -30,7 +30,7 @@ export default function Mob_Nav() {
 
         {/* Social */}
         <li className="flex flex-col items-center text-gray-600 hover:text-blue-500 transition">
-          <Link href="/social" className="flex flex-col items-center">
+          <Link href="Social" className="flex flex-col items-center">
             <Image src="/add-account.svg" alt="Social" width={24} height={24} />
             <span className="text-xs">Social</span>
           </Link>
