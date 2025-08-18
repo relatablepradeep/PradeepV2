@@ -3,6 +3,7 @@
 import Animation from "../../../Animation/models/spline"
 import { useState } from "react"
 import axios from "axios";
+import {  ArrowUpRight } from 'lucide-react'
 
 export default function Email() {
   const [email, setEmail] = useState('');
@@ -83,11 +84,12 @@ export default function Email() {
                   onClick={handleEmail}
                   className="ml-2 p-2 bg-gray-100 hover:bg-gray-200 rounded-md"
                 >
-                  <img
-                    src="/icons8-arrow-50.png"
-                    className="h-6 sm:h-8 md:h-10"
-                    alt="Submit"
-                  />
+                
+
+                   <ArrowUpRight
+                                size={20} 
+                                className="h-6 sm:h-8 md:h-10 text-gray-400 transition-all duration-500 ease-out transform hover:text-blue-500 hover:scale-110"
+                              />
                 </button>
               </div>
             </div>

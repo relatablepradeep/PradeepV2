@@ -93,47 +93,37 @@ export default function Project() {
     setIsDragging(false);
   };
 
-  // Mouse events
+  // Mouse & Touch events on container
   const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault();
     handleStart(e.clientY);
   };
 
-  const handleMouseMove = (e: MouseEvent) => {
-    handleMove(e.clientY);
-  };
-
-  const handleMouseUp = () => {
-    handleEnd();
-  };
-
-  // Touch events
   const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
     handleStart(e.touches[0].clientY);
   };
 
-  const handleTouchMove = (e: TouchEvent) => {
-    e.preventDefault();
-    handleMove(e.touches[0].clientY);
-  };
-
-  const handleTouchEnd = () => {
-    handleEnd();
-  };
-
-  // Add global mouse events when dragging
+  // ✅ Global listeners (fixed eslint warning)
   useEffect(() => {
     if (isDragging) {
-      document.addEventListener('mousemove', handleMouseMove);
-      document.addEventListener('mouseup', handleMouseUp);
-      document.addEventListener('touchmove', handleTouchMove, { passive: true });
-      document.addEventListener('touchend', handleTouchEnd);
-      
+      const onMouseMove = (e: MouseEvent) => handleMove(e.clientY);
+      const onMouseUp = () => handleEnd();
+      const onTouchMove = (e: TouchEvent) => {
+        e.preventDefault();
+        handleMove(e.touches[0].clientY);
+      };
+      const onTouchEnd = () => handleEnd();
+
+      document.addEventListener("mousemove", onMouseMove);
+      document.addEventListener("mouseup", onMouseUp);
+      document.addEventListener("touchmove", onTouchMove, { passive: false });
+      document.addEventListener("touchend", onTouchEnd);
+
       return () => {
-        document.removeEventListener('mousemove', handleMouseMove);
-        document.removeEventListener('mouseup', handleMouseUp);
-        document.removeEventListener('touchmove', handleTouchMove);
-        document.removeEventListener('touchend', handleTouchEnd);
+        document.removeEventListener("mousemove", onMouseMove);
+        document.removeEventListener("mouseup", onMouseUp);
+        document.removeEventListener("touchmove", onTouchMove);
+        document.removeEventListener("touchend", onTouchEnd);
       };
     }
   }, [isDragging, startY, startOffset]);
@@ -195,7 +185,7 @@ export default function Project() {
   const smoothOffset = offset % 140;
 
   return (
-    <div className="fixed inset-0  overflow-hidden">
+    <div className="fixed inset-0 overflow-hidden">
       {/* Floating particles animation */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         {[...Array(20)].map((_, i) => (
@@ -218,43 +208,43 @@ export default function Project() {
         style={{ perspective: "1000px" }}
       >
         <div
-          className="relative w-72  h-[400px] overflow-hidden select-none touch-none"
-          style={{ 
-            cursor: expandedProject ? 'default' : (isDragging ? 'grabbing' : 'grab')
-          }}
+          className="relative w-72 h-[400px] overflow-hidden select-none touch-none"
+          style={{ cursor: expandedProject ? "default" : isDragging ? "grabbing" : "grab" }}
           onMouseDown={handleMouseDown}
           onTouchStart={handleTouchStart}
         >
           {visibleProjects.map((proj, i) => {
-            const baseY = (i * 140) + smoothOffset;
+            const baseY = i * 140 + smoothOffset;
             const translateY = baseY;
-            
+
             const normalizedPos = ((i * 140 + smoothOffset) / 140) % 3;
             let translateZ;
             if (normalizedPos < 1) {
-              translateZ = -120 + (normalizedPos * 240);
+              translateZ = -120 + normalizedPos * 240;
             } else if (normalizedPos < 2) {
-              translateZ = 100 - ((normalizedPos - 1) * 240);
+              translateZ = 100 - (normalizedPos - 1) * 240;
             } else {
               translateZ = -120;
             }
-            
+
             const distanceFromCenter = Math.abs(translateY - 140);
-            const scale = Math.max(0.8, 1 - (distanceFromCenter / 400));
-            const opacity = Math.max(0.1, 1 - (distanceFromCenter / 250));
-            
+            const scale = Math.max(0.8, 1 - distanceFromCenter / 400);
+            const opacity = Math.max(0.1, 1 - distanceFromCenter / 250);
+
             if (translateY < -200 || translateY > 500) return null;
 
             return (
               <div
                 key={proj.key}
-                className={`absolute left-1/2 -translate-x-1/2  w-72 h-32 ${proj.color} text-white font-bold flex items-center justify-center rounded-xl shadow-lg cursor-pointer transition-all duration-300 hover:shadow-xl hover:scale-105 active:scale-95`}
+                className={`absolute left-1/2 -translate-x-1/2 w-72 h-32 ${proj.color} text-white font-bold flex items-center justify-center rounded-xl shadow-lg cursor-pointer transition-all duration-300 hover:shadow-xl hover:scale-105 active:scale-95`}
                 style={{
                   transform: `translateY(${translateY}px) translateZ(${translateZ}px) scale(${scale})`,
                   opacity,
-                  zIndex: Math.floor(10 - (translateY / 140)),
-                  textShadow: '2px 2px 4px rgba(0,0,0,0.3)',
-                  transition: isDragging ? 'none' : 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s ease',
+                  zIndex: Math.floor(10 - translateY / 140),
+                  textShadow: "2px 2px 4px rgba(0,0,0,0.3)",
+                  transition: isDragging
+                    ? "none"
+                    : "transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s ease",
                 }}
                 onClick={() => handleProjectClick(proj, proj.originalIndex)}
               >
@@ -270,15 +260,15 @@ export default function Project() {
 
       {/* Expanded Project Modal */}
       {expandedProject && (
-        <div 
+        <div
           className={`fixed inset-0 bg-black/50 backdrop-blur-md flex items-center justify-center z-50 transition-all duration-300 ${
-            isAnimating ? 'opacity-0' : 'opacity-100'
+            isAnimating ? "opacity-0" : "opacity-100"
           }`}
           onClick={closeExpanded}
         >
-          <div 
+          <div
             className={`bg-white rounded-2xl p-8 mx-4 max-w-md w-full shadow-2xl transform transition-all duration-300 ${
-              isAnimating ? 'scale-90 opacity-0' : 'scale-100 opacity-100'
+              isAnimating ? "scale-90 opacity-0" : "scale-100 opacity-100"
             }`}
             onClick={(e) => e.stopPropagation()}
           >
@@ -294,18 +284,15 @@ export default function Project() {
 
             {/* Project content */}
             <div className="space-y-6">
-              {/* Emoji and title */}
               <div className="text-center space-y-3">
                 <div className="text-6xl animate-pulse">{expandedProject.emoji}</div>
                 <h2 className="text-2xl font-bold text-gray-800">{expandedProject.title}</h2>
               </div>
 
-              {/* Description */}
               <p className="text-gray-600 leading-relaxed text-center">
                 {expandedProject.description}
               </p>
 
-              {/* Action buttons */}
               <div className="flex justify-between items-center pt-4">
                 <a
                   href={expandedProject.liveUrl}

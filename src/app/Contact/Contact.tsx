@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import { Mail, Github, Linkedin, Twitter, X } from "lucide-react";
 
 // ✅ Define the type for socials
@@ -71,40 +71,42 @@ export default function Contact() {
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
-  // Touch/Mouse event handlers
-  const handleStart = (clientY: number) => {
+  // Core drag logic
+  const handleStart = useCallback((clientY: number) => {
     if (expandedSocial) return;
     setIsDragging(true);
     setStartY(clientY);
     setStartOffset(offset);
-  };
+  }, [expandedSocial, offset]);
 
-  const handleMove = (clientY: number) => {
+  const handleMove = useCallback((clientY: number) => {
     if (!isDragging || expandedSocial) return;
     const deltaY = clientY - startY;
     const newOffset = startOffset + deltaY * 1.2;
     setOffset(newOffset);
-  };
+  }, [isDragging, expandedSocial, startY, startOffset]);
 
-  const handleEnd = () => setIsDragging(false);
+  const handleEnd = useCallback(() => {
+    setIsDragging(false);
+  }, []);
 
   // Mouse events
   const handleMouseDown = (e: React.MouseEvent) => {
     e.preventDefault();
     handleStart(e.clientY);
   };
-  const handleMouseMove = (e: MouseEvent) => handleMove(e.clientY);
-  const handleMouseUp = () => handleEnd();
+  const handleMouseMove = useCallback((e: MouseEvent) => handleMove(e.clientY), [handleMove]);
+  const handleMouseUp = useCallback(() => handleEnd(), [handleEnd]);
 
   // Touch events
   const handleTouchStart = (e: React.TouchEvent) => handleStart(e.touches[0].clientY);
-  const handleTouchMove = (e: TouchEvent) => {
+  const handleTouchMove = useCallback((e: TouchEvent) => {
     e.preventDefault();
     handleMove(e.touches[0].clientY);
-  };
-  const handleTouchEnd = () => handleEnd();
+  }, [handleMove]);
+  const handleTouchEnd = useCallback(() => handleEnd(), [handleEnd]);
 
-  // Add global mouse events when dragging
+  // Add global mouse/touch events when dragging
   useEffect(() => {
     if (isDragging) {
       document.addEventListener("mousemove", handleMouseMove);
@@ -118,7 +120,7 @@ export default function Contact() {
         document.removeEventListener("touchend", handleTouchEnd);
       };
     }
-  }, [isDragging, startY, startOffset]);
+  }, [isDragging, handleMouseMove, handleMouseUp, handleTouchMove, handleTouchEnd]);
 
   const handleSocialClick = (social: SocialLink, socialIndex: number) => {
     if (isDragging || isAnimating) return;

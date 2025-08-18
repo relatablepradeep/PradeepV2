@@ -7,15 +7,13 @@ import { Linkedin, MessageCircle, Twitter, Instagram ,Github} from 'lucide-react
 function Footer() {
     const [showSocialDropdown, setShowSocialDropdown] = useState(false);
 
+    const handleClick = () => {
+        const email = 'relatablepradeep@gmail.com';
+        const subject = encodeURIComponent('Hello from your site!');
+        const body = encodeURIComponent('Hi there,\n\nI would like to get in touch with you.');
 
-
-      const handleClick = () => {
-    const email = 'relatablepradeep@gmail.com';
-    const subject = encodeURIComponent('Hello from your site!');
-    const body = encodeURIComponent('Hi there,\n\nI would like to get in touch with you.');
-
-    window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
-  };
+        window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
+    };
 
     const socialLinks = [
         {
@@ -47,7 +45,6 @@ function Footer() {
             icon: <Github size={20} />,
             url:'https://github.com/relatablepradeep',
             color: 'hover:text-pink-600'
-
         }
     ];
 
@@ -59,7 +56,7 @@ function Footer() {
                     Got a killer idea?
                 </h1>
                 <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-semibold mt-2 whitespace-nowrap">
-                    Let's bring it to life!
+                    Let&apos;s bring it to life!
                 </h1>
 
                 <div className="flex flex-row flex-wrap justify-center items-center gap-3 sm:gap-5 mt-6">
@@ -92,7 +89,7 @@ function Footer() {
                                     className="bg-white border-2 border-black rounded-xl shadow-2xl p-8 max-w-2xl w-full mx-4"
                                     onClick={(e) => e.stopPropagation()}
                                 >
-                                    <h3 className="text-2xl font-semibold text-center mb-8">Let's Connect!</h3>
+                                    <h3 className="text-2xl font-semibold text-center mb-8">Let&apos;s Connect!</h3>
                                     <div className="flex justify-center items-center gap-8 sm:gap-12">
                                         {socialLinks.map((social, index) => (
                                             <a
@@ -130,7 +127,6 @@ function Footer() {
                             </span>
                         </Link>
                     </button>
-
                 </div>
 
                 <div className="mt-6 text-lg sm:text-xl md:text-2xl hover:text-blue-500">
@@ -139,8 +135,6 @@ function Footer() {
                     </Link>
                 </div>
             </div>
-
-
         </footer>
     );
 }

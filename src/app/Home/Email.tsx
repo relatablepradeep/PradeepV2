@@ -3,6 +3,7 @@
 import Animation from "@/app/Animation/models/spline"
 import { useState } from "react"
 import axios from "axios";
+import {  ArrowUpRight } from 'lucide-react';
 
 type NotificationType = "success" | "error" | "warning";
 
@@ -137,11 +138,17 @@ export default function Email() {
                        hover:bg-gray-100 transition-colors"
                     >
                       <div className="flex items-center justify-center h-full w-full">
-                        <img
+                        {/* <img
                           src="/icons8-arrow-50.png"
                           className="h-6 md:h-10 lg:h-12 xl:h-14"
                           alt="" // decorative image
-                        />
+                        /> */}
+
+
+                        <ArrowUpRight
+                                      size={20}
+                                      className="h-6 md:h-10 lg:h-12 xl:h-14 text-gray-400 transition-all duration-500 ease-out transform hover:text-blue-500 hover:scale-110"
+                                    />
                       </div>
                     </button>
                   </div>
