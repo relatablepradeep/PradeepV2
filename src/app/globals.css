@@ -24,3 +24,30 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+
+@layer utilities {
+  .perspective-1200 {
+    perspective: 1200px;
+  }
+  .carousel-grab {
+    cursor: grab;
+  }
+  .carousel-grabbing {
+    cursor: grabbing;
+  }
+  .drop-shadow-custom {
+    filter: drop-shadow(0 10px 25px rgba(0,0,0,0.15));
+  }
+  .card-transform {
+    transform: translateY(var(--translate-y, 0)) translateZ(var(--translate-z, 0)) scale(var(--scale, 1));
+    opacity: var(--opacity, 1);
+    z-index: var(--z-index, 1);
+    transition: var(--transition, all 0.3s ease);
+  }
+  .expanded-transform {
+    transform: scale(var(--expanded-scale, 1)) translateY(var(--expanded-translate-y, 0));
+    opacity: var(--expanded-opacity, 1);
+    transition: var(--expanded-transition, all 0.3s ease);
+  }
+}

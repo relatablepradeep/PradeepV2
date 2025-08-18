@@ -21,6 +21,7 @@
     "react-text-transition": "^3.1.0",
     "react-type-animation": "^3.2.0",
     "react-world-flags": "^1.6.0",
+    "tailwindcss-animation-delay": "^2.0.2",
     "typewriter-effect": "^2.22.0"
   },
   "devDependencies": {
@@ -29,6 +30,7 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@types/react-world-flags": "^1.6.0",
     "eslint": "^9",
     "eslint-config-next": "15.4.5",
     "tailwindcss": "^4",

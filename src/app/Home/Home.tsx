@@ -34,11 +34,13 @@ export default function MyHome() {
           )}
 
           {/* Image + Flag + Name */}
-          <span className="
-            text-black flex justify-center items-center 
-            lg:relative lg:bottom-60 
-            md:relative md:bottom-32
-          ">
+          <span
+            className="
+              text-black flex justify-center items-center 
+              lg:relative lg:bottom-60 
+              md:relative md:bottom-32
+            "
+          >
             <div className="flex justify-end">
               <Flag
                 code="IN"
@@ -63,45 +65,52 @@ export default function MyHome() {
               />
             </div>
 
-            <div className="
-              flex font-bold 
-              lg:right-48 lg:top-24 lg:text-6xl
-              md:right-28 md:top-16 md:text-5xl
-              relative
-            ">
+            <div
+              className="
+                flex font-bold 
+                lg:right-48 lg:top-24 lg:text-6xl
+                md:right-28 md:top-16 md:text-5xl
+                relative
+              "
+            >
               Pradeep!
             </div>
 
-            <button className="
-              absolute
-              lg:mt-80
-              md:mt-64
-            ">
+            <button
+              aria-label="Typing animation button"
+              className="
+                absolute
+                lg:mt-80
+                md:mt-64
+              "
+            >
               <Typing />
             </button>
           </span>
         </div>
 
         {/* Info Section */}
-        <div className="
-          absolute 
-          lg:left-14 lg:space-y-4 lg:mt-20 lg:text-xl
-          md:left-10 md:space-y-3 md:mt-14 md:text-lg
-        ">
+        <div
+          className="
+            absolute 
+            lg:left-14 lg:space-y-4 lg:mt-20 lg:text-xl
+            md:left-10 md:space-y-3 md:mt-14 md:text-lg
+          "
+        >
           <div className="font-semibold text-gray-800 flex items-center space-x-2">
-            <Code className="w-4 h-4" />
+            <Code className="w-4 h-4" aria-label="Role" />
             <span>Freelancer</span>
           </div>
 
           <div className="flex items-center text-gray-700 space-x-2">
-            <MapPin className="w-4 h-4" />
+            <MapPin className="w-4 h-4" aria-label="Location" />
             <span>Uttarakhand</span>
           </div>
 
           <div className="flex items-center space-x-2">
             <Mail
               className="w-4 h-4 text-blue-600 cursor-pointer hover:scale-110 transition"
-              title="Open email app"
+              aria-label="Open email app"
               onClick={handleEmailAppRedirect}
             />
             <span

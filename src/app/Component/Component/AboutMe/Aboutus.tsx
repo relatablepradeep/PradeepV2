@@ -40,7 +40,7 @@ export default function Aboutus() {
         const json = await res.json();
         setData(json.contributions || []);
         setRepos(json.repositories || []);
-      } catch (err) {
+      } catch (_err) {
         setError("Failed to fetch data");
       } finally {
         setIsLoading(false);

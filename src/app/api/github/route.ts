@@ -57,8 +57,17 @@ export async function GET() {
       return new Response(JSON.stringify({ error: data.errors }), { status: 500 });
     }
 
-    const weeks = data.data.user.contributionsCollection.contributionCalendar.weeks;
-    const days = weeks.flatMap((w: any) => w.contributionDays);
+    type ContributionDay = {
+      date: string;
+      contributionCount: number;
+    };
+
+    type Week = {
+      contributionDays: ContributionDay[];
+    };
+
+    const weeks: Week[] = data.data.user.contributionsCollection.contributionCalendar.weeks;
+    const days = weeks.flatMap((w) => w.contributionDays);
 
     const repositories = data.data.user.repositories.nodes;
 

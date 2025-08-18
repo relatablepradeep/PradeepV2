@@ -4,15 +4,23 @@ import Animation from "@/app/Animation/models/spline"
 import { useState } from "react"
 import axios from "axios";
 
+type NotificationType = "success" | "error" | "warning";
+
+interface Notification {
+  show: boolean;
+  message: string;
+  type: NotificationType | "";
+}
+
 export default function Email() {
   const [email, setEmail] = useState('');
-  const [notification, setNotification] = useState({
+  const [notification, setNotification] = useState<Notification>({
     show: false,
     message: '',
-    type: '' // 'success', 'error', or 'warning'
+    type: ''
   });
 
-  const showNotification = (message, type) => {
+  const showNotification = (message: string, type: NotificationType) => {
     setNotification({
       show: true,
       message,
@@ -51,10 +59,14 @@ export default function Email() {
     <>
       {/* Notification Popup */}
       {notification.show && (
-        <div className={`fixed top-5 right-5 z-50 rounded-lg shadow-lg px-6 py-4 max-w-md transform transition-all duration-500 animate-fade-in-down
-                        ${notification.type === 'success' ? 'bg-green-600' :
-            notification.type === 'error' ? 'bg-red-600' :
-              'bg-yellow-600'} text-white`}>
+        <div
+          className={`fixed top-5 right-5 z-50 rounded-lg shadow-lg px-6 py-4 max-w-md transform transition-all duration-500 animate-fade-in-down
+            ${notification.type === 'success'
+              ? 'bg-green-600'
+              : notification.type === 'error'
+              ? 'bg-red-600'
+              : 'bg-yellow-600'} text-white`}
+        >
           <div className="flex items-center">
             {notification.type === 'success' && (
               <svg className="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -77,6 +89,7 @@ export default function Email() {
           {/* Close button */}
           <button
             onClick={() => setNotification(prev => ({ ...prev, show: false }))}
+            aria-label="Close notification"
             className="absolute top-2 right-2 text-white hover:text-gray-200"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -96,9 +109,11 @@ export default function Email() {
 
             <div className="mb-6 lg:mb-0 mt-6 lg:mt-0 w-full">
               <div className="relative">
-                <div className="border-white shadow-md border-2 bg-white rounded-md
+                <div
+                  className="border-white shadow-md border-2 bg-white rounded-md
                     relative lg:absolute lg:bottom-10 lg:mb-11 xl:bottom-20 2xl:bottom-32
-                    h-16 md:h-24 lg:h-32 lg:w-4xl left-8 w-full mx-auto">
+                    h-16 md:h-24 lg:h-32 lg:w-4xl left-8 w-full mx-auto"
+                >
                   <div className="flex items-center h-full">
                     <input
                       type="email"
@@ -115,6 +130,7 @@ export default function Email() {
                     />
                     <button
                       onClick={handleEmail}
+                      aria-label="Submit email"
                       className="absolute right-2 top-1/2 -translate-y-1/2
                        border-white focus:border-gray-900 
                        bg-white rounded-md flex items-center justify-center
@@ -124,7 +140,7 @@ export default function Email() {
                         <img
                           src="/icons8-arrow-50.png"
                           className="h-6 md:h-10 lg:h-12 xl:h-14"
-                          alt="Submit"
+                          alt="" // decorative image
                         />
                       </div>
                     </button>

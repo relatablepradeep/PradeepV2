@@ -3,9 +3,27 @@
 import React, { useState, useEffect } from 'react';
 import { Github, ExternalLink, ArrowUpRight } from 'lucide-react';
 
+// Project Type
+interface Project {
+  id: number;
+  name: string;
+  emoji: string;
+  overview: string;
+  techStack: string[];
+  githubUrl: string;
+  liveUrl: string;
+}
 
+// Props for ProjectCard
+interface ProjectCardProps {
+  project: Project;
+  isExpanded: boolean;
+  onToggle: () => void;
+  isHidden: boolean;
+  index: number;
+}
 
-const ProjectCard = ({ project, isExpanded, onToggle, isHidden, index }) => {
+const ProjectCard: React.FC<ProjectCardProps> = ({ project, isExpanded, onToggle, isHidden, index }) => {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
@@ -15,14 +33,14 @@ const ProjectCard = ({ project, isExpanded, onToggle, isHidden, index }) => {
     return () => clearTimeout(timer);
   }, [index]);
 
-  const getEntranceDirection = (index) => {
-    const directions = ['left', 'right', 'top', 'bottom'];
+  const getEntranceDirection = (index: number): 'left' | 'right' | 'top' | 'bottom' => {
+    const directions: Array<'left' | 'right' | 'top' | 'bottom'> = ['left', 'right', 'top', 'bottom'];
     return directions[index % 4];
   };
 
   const direction = getEntranceDirection(index);
 
-  const entranceClass = {
+  const entranceClass: Record<'left' | 'right' | 'top' | 'bottom', string> = {
     left: 'translate-x-[-100%]',
     right: 'translate-x-[100%]',
     top: 'translate-y-[-100%]',
@@ -60,6 +78,7 @@ const ProjectCard = ({ project, isExpanded, onToggle, isHidden, index }) => {
               href={project.githubUrl}
               target="_blank"
               rel="noopener noreferrer"
+              title="GitHub Repository"
               className="p-2 hover:bg-gray-100 rounded-full transition-all duration-300 transform hover:scale-110"
             >
               <Github size={20} className="text-gray-600 hover:text-gray-800 transition-all duration-300" />
@@ -68,6 +87,7 @@ const ProjectCard = ({ project, isExpanded, onToggle, isHidden, index }) => {
               href={project.liveUrl}
               target="_blank"
               rel="noopener noreferrer"
+              title="Live Demo"
               className="p-2 hover:bg-gray-100 rounded-full transition-all duration-300 transform hover:scale-110"
             >
               <ExternalLink size={20} className="text-gray-600 hover:text-gray-800 transition-all duration-300" />
@@ -88,21 +108,8 @@ const ProjectCard = ({ project, isExpanded, onToggle, isHidden, index }) => {
         <div className="px-4 pb-4">
           <div className="mt-2 relative">
             <div className="absolute -inset-[3px] rounded-xl">
-              <div className="absolute inset-0 rounded-xl opacity-90"
-                   style={{
-                     background: 'linear-gradient(90deg, #ff0000, #ff8000, #ffff00, #80ff00, #00ff00, #00ff80, #00ffff, #0080ff, #0000ff, #8000ff, #ff00ff, #ff0080, #ff0000)',
-                     backgroundSize: '400% 400%',
-                     animation: 'rainbowMove 1s linear infinite'
-                   }}>
-              </div>
+              <div className="absolute inset-0 rounded-xl opacity-90 rainbow-border"></div>
             </div>
-
-            <style dangerouslySetInnerHTML={{__html: `
-              @keyframes rainbowMove {
-                0% { background-position: 0% 50%; }
-                100% { background-position: 100% 50%; }
-              }
-            `}} />
 
             <div className="relative bg-white rounded-xl shadow-lg border border-gray-200 p-8">
               <div className="text-center mb-6">
@@ -116,7 +123,7 @@ const ProjectCard = ({ project, isExpanded, onToggle, isHidden, index }) => {
               </p>
               <div className="mb-8">
                 <div className="flex flex-wrap gap-2 justify-center">
-                  {project.techStack.map((tech, index) => (
+                  {project.techStack.map((tech: string, index: number) => (
                     <span
                       key={index}
                       className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm font-medium"
@@ -154,10 +161,10 @@ const ProjectCard = ({ project, isExpanded, onToggle, isHidden, index }) => {
   );
 };
 
-const Liner = () => {
-  const [expandedProject, setExpandedProject] = useState(null);
+const Liner: React.FC = () => {
+  const [expandedProject, setExpandedProject] = useState<number | null>(null);
 
-  const projects = [
+  const projects: Project[] = [
     {
       id: 1,
       name: "Project Ayurleaf",
@@ -196,7 +203,7 @@ const Liner = () => {
     }
   ];
 
-  const handleProjectToggle = (projectId) => {
+  const handleProjectToggle = (projectId: number) => {
     setExpandedProject(expandedProject === projectId ? null : projectId);
   };
 

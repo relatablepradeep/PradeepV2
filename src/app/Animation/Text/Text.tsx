@@ -3,7 +3,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 
 const Text: React.FC = () => {
-  const [currentLetterIndex, setCurrentLetterIndex] = useState<number>(0);
   const [circlePosition, setCirclePosition] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
   const [isTabletOrLarger, setIsTabletOrLarger] = useState(false);
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -22,7 +21,7 @@ const Text: React.FC = () => {
 
     const distance = Math.sqrt(
       Math.pow(letterCenterX - circlePosition.x, 2) +
-        Math.pow(letterCenterY - circlePosition.y, 2)
+      Math.pow(letterCenterY - circlePosition.y, 2)
     );
 
     return distance <= 80;
@@ -30,7 +29,6 @@ const Text: React.FC = () => {
 
   const animateRandomly = () => {
     const randomIndex = Math.floor(Math.random() * word.length);
-    setCurrentLetterIndex(randomIndex);
 
     if (letterRefs.current[randomIndex] && containerRef.current) {
       const letterRect = letterRefs.current[randomIndex]!.getBoundingClientRect();
@@ -44,7 +42,6 @@ const Text: React.FC = () => {
   };
 
   useEffect(() => {
-    // Detect screen width
     const checkScreenSize = () => {
       setIsTabletOrLarger(window.innerWidth >= 768); // md breakpoint
     };
@@ -80,7 +77,9 @@ const Text: React.FC = () => {
             {word.split('').map((letter, index) => (
               <span
                 key={index}
-                ref={(el) => (letterRefs.current[index] = el)}
+                ref={(el: HTMLSpanElement | null): void => {
+                  letterRefs.current[index] = el;
+                }}
                 className={`select-none font-bold transition-all duration-700 ease-out 
                   text-4xl sm:text-5xl md:text-6xl
                   ${isLetterUnderCircle(index) ? 'text-white' : 'text-blue-400'}`}

@@ -2,7 +2,17 @@
 import { useEffect, useState, useRef } from "react";
 import { ExternalLink, Github, X } from "lucide-react";
 
-const projects = [
+// ✅ Define a Project type
+type Project = {
+  title: string;
+  color: string;
+  emoji: string;
+  description: string;
+  liveUrl: string;
+  githubUrl: string;
+};
+
+const projects: Project[] = [
   { 
     title: "Ayurvedic Wellness", 
     color: "bg-green-500",
@@ -51,9 +61,9 @@ export default function Project() {
   const [isDragging, setIsDragging] = useState(false);
   const [startY, setStartY] = useState(0);
   const [startOffset, setStartOffset] = useState(0);
-  const [expandedProject, setExpandedProject] = useState(null);
+  const [expandedProject, setExpandedProject] = useState<(Project & { index: number }) | null>(null);
   const [isAnimating, setIsAnimating] = useState(false);
-  const containerRef = useRef(null);
+  const containerRef = useRef<HTMLDivElement | null>(null);
 
   // ✅ detect mobile
   useEffect(() => {
@@ -64,14 +74,14 @@ export default function Project() {
   }, []);
 
   // Touch/Mouse event handlers for scrolling
-  const handleStart = (clientY) => {
+  const handleStart = (clientY: number) => {
     if (expandedProject) return;
     setIsDragging(true);
     setStartY(clientY);
     setStartOffset(offset);
   };
 
-  const handleMove = (clientY) => {
+  const handleMove = (clientY: number) => {
     if (!isDragging || expandedProject) return;
     
     const deltaY = clientY - startY;
@@ -84,12 +94,12 @@ export default function Project() {
   };
 
   // Mouse events
-  const handleMouseDown = (e) => {
+  const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault();
     handleStart(e.clientY);
   };
 
-  const handleMouseMove = (e) => {
+  const handleMouseMove = (e: MouseEvent) => {
     handleMove(e.clientY);
   };
 
@@ -98,11 +108,11 @@ export default function Project() {
   };
 
   // Touch events
-  const handleTouchStart = (e) => {
+  const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
     handleStart(e.touches[0].clientY);
   };
 
-  const handleTouchMove = (e) => {
+  const handleTouchMove = (e: TouchEvent) => {
     e.preventDefault();
     handleMove(e.touches[0].clientY);
   };
@@ -128,7 +138,7 @@ export default function Project() {
     }
   }, [isDragging, startY, startOffset]);
 
-  const handleProjectClick = (project, projectIndex) => {
+  const handleProjectClick = (project: Project, projectIndex: number) => {
     if (isDragging || isAnimating) return;
     
     setIsAnimating(true);
@@ -169,7 +179,7 @@ export default function Project() {
 
   // Create infinite loop effect
   const getVisibleProjects = () => {
-    const result = [];
+    const result: (Project & { key: number; originalIndex: number })[] = [];
     for (let i = 0; i < 4; i++) {
       const projectIndex = (projects.length - 1 - Math.floor(offset / 140) - i + projects.length * 1000) % projects.length;
       result.push({
@@ -255,8 +265,6 @@ export default function Project() {
               </div>
             );
           })}
-
-         
         </div>
       </div>
 
@@ -277,6 +285,8 @@ export default function Project() {
             {/* Close button */}
             <button
               onClick={closeExpanded}
+              aria-label="Close modal"
+              title="Close"
               className="absolute top-4 right-4 p-2 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors duration-200"
             >
               <X size={20} className="text-gray-600" />
