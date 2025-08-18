@@ -1,4 +1,4 @@
-import Github from '../Component/github/Github'
+import Github from '../Component/Github/Github'
 
  
 export default function AboutMe(){
