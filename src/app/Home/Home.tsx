@@ -22,7 +22,7 @@ export default function MyHome() {
   };
 
   return (
-    // Hidden on mobile, visible from md (tablet) upwards
+    
     <main className="fixed top-0 left-0 md:w-1/2 w-full h-screen hidden md:block">
       <section className="w-full h-full bg-amber-50 flex justify-center items-center">
         <div>
@@ -37,28 +37,28 @@ export default function MyHome() {
           <span
             className="
               text-black flex justify-center items-center 
-              lg:relative lg:bottom-60 
-              md:relative md:bottom-32
+              lg:relative lg:bottom-52 
+              // md:relative md:bottom-32
             "
           >
-            <div className="flex justify-end">
+            <div className="flex ">
               <Flag
                 code="IN"
                 className="
                   z-10 
-                  lg:w-20 lg:right-36
+                  lg:w-12 lg:right-32
                   md:w-16 md:right-24
-                  relative bottom-8
+                  relative 
                 "
               />
               <Image
                 src={Photo}
-                width={250}
-                height={250}
+                width={150}
+                height={150}
                 alt="Picture of the author"
                 className="
                   rounded-full z-5 
-                  lg:right-56 lg:top-16
+                  lg:right-45 lg:top-16
                   md:right-36 md:top-12
                   relative
                 "
@@ -68,7 +68,7 @@ export default function MyHome() {
             <div
               className="
                 flex font-bold 
-                lg:right-48 lg:top-24 lg:text-6xl
+                lg:right-36 lg:top-16 lg:text-5xl
                 md:right-28 md:top-16 md:text-5xl
                 relative
               "
@@ -80,7 +80,7 @@ export default function MyHome() {
               aria-label="Typing animation button"
               className="
                 absolute
-                lg:mt-80
+                lg:mt-60
                 md:mt-64
               "
             >
@@ -93,7 +93,7 @@ export default function MyHome() {
         <div
           className="
             absolute 
-            lg:left-14 lg:space-y-4 lg:mt-20 lg:text-xl
+            lg:left-14 lg:space-y-4 lg:mt-8 lg:text-xl
             md:left-10 md:space-y-3 md:mt-14 md:text-lg
           "
         >
@@ -124,7 +124,7 @@ export default function MyHome() {
         </div>
 
         {/* Social */}
-        <div className="fixed bottom-1">
+        <div className="fixed lg:bottom-1">
           <Social />
         </div>
       </section>

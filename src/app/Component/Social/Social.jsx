@@ -21,7 +21,7 @@ export default function SocialMediaPanel() {
   ];
 
   return (
-    <div className="hidden md:flex flex-col p-4 md:p-6 items-center">
+    <div className="hidden md:flex flex-col   items-center">
       <div
         className="
           grid 
@@ -37,8 +37,8 @@ export default function SocialMediaPanel() {
             onClick={() => setActive(id)}
             className={`
               flex items-center gap-4 
-              p-4 md:p-5 lg:p-6 
-              w-72 md:w-80 lg:w-96
+               lg:p-4 
+               md:w-80 lg:w-80
               rounded-xl shadow-md 
               transition-all duration-300 transform 
               hover:scale-105 

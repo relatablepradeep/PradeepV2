@@ -101,60 +101,50 @@ export default function Email() {
       )}
 
       {/* Only visible on md and larger */}
-      <main className="hidden md:block">
-        <section className="w-1/2 flex justify-self-end">
-          <div className="w-full bg-[#FFDAB3]">
-            <div className="lg:relative lg:bottom-28">
+      <main className="hidden md:block fixed inset-0 overflow-hidden">
+        <section className="w-1/2 h-full flex justify-self-end">
+          <div className="w-full h-full bg-[#FFDAB3] overflow-hidden">
+            <div className="lg:relative lg:top-6">
               <Animation />
             </div>
 
-            <div className="mb-6 lg:mb-0 mt-6 lg:mt-0 w-full">
-              <div className="relative">
-                <div
-                  className="border-white shadow-md border-2 bg-white rounded-md
-                    relative lg:absolute lg:bottom-10 lg:mb-11 xl:bottom-20 2xl:bottom-32
-                    h-16 md:h-24 lg:h-32 lg:w-4xl left-8 w-full mx-auto"
-                >
-                  <div className="flex items-center h-full">
-                    <input
-                      type="email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      className="w-full h-full md:text-lg lg:text-xl xl:text-2xl 2xl:text-3xl
-                      text-black px-4 border-white rounded-md
-                      placeholder:text-center placeholder:text-xs md:placeholder:text-base lg:placeholder:text-lg
-                      focus:outline-none focus:ring-0 focus:border-white"
-                      placeholder="Want to contact me? Drop your email here"
-                      onKeyPress={(e) => {
-                        if (e.key === 'Enter') handleEmail();
-                      }}
-                    />
-                    <button
-                      onClick={handleEmail}
-                      aria-label="Submit email"
-                      className="absolute right-2 top-1/2 -translate-y-1/2
-                       border-white focus:border-gray-900 
-                       bg-white rounded-md flex items-center justify-center
-                       hover:bg-gray-100 transition-colors"
-                    >
-                      <div className="flex items-center justify-center h-full w-full">
-                        {/* <img
-                          src="/icons8-arrow-50.png"
-                          className="h-6 md:h-10 lg:h-12 xl:h-14"
-                          alt="" // decorative image
-                        /> */}
-
-
-                        <ArrowUpRight
-                                      size={20}
-                                      className="h-6 md:h-10 lg:h-12 xl:h-14 text-gray-400 transition-all duration-500 ease-out transform hover:text-blue-500 hover:scale-110"
-                                    />
-                      </div>
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
+           <div className="relative px-2 lg:bottom-30">
+  <div
+    className="border-white shadow-md border-2 bg-white rounded-md
+      md:h-24 lg:h-28    w-full max-w-full"
+  >
+    <div className="flex items-center h-full">
+      <input
+        type="email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        className="w-full h-full md:text-lg lg:text-xl xl:text-2xl 2xl:text-3xl
+        text-black   border-white rounded-md
+        placeholder:text-center placeholder:text-xs md:placeholder:text-base lg:placeholder:text-lg
+        focus:outline-none focus:ring-0 focus:border-white"
+        placeholder="Want to contact me? Drop your email here"
+        onKeyPress={(e) => {
+          if (e.key === 'Enter') handleEmail();
+        }}
+      />
+      <button
+        onClick={handleEmail}
+        aria-label="Submit email"
+        className="absolute right-6 top-1/2 -translate-y-1/2
+         border-white focus:border-gray-900 
+         bg-white rounded-md flex items-center justify-center
+         hover:bg-gray-100 transition-colors p-1"
+      >
+        <div className="flex items-center justify-center h-full w-full">
+          <ArrowUpRight
+            size={20}
+            className="h-6 md:h-10 lg:h-12 xl:h-14 text-gray-400 transition-all duration-500 ease-out transform hover:text-blue-500 hover:scale-110"
+          />
+        </div>
+      </button>
+    </div>
+  </div>
+</div>
 
           </div>
         </section>

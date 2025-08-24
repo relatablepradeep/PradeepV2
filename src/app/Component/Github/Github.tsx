@@ -97,13 +97,14 @@ export default function Github() {
   return (
     // Hidden on mobile, visible on tablet, iPad, and HP Victus
     <div className="hidden md:block fixed top-0 left-0 w-1/2 min-h-screen p-8 bg-gradient-to-br from-gray-50 to-gray-100">
-      <div className="max-w-2xl relative top-48 left-24">
+      <div className="max-w-md relative top-25 left-16">
+      
         {repos.length > 0 && (
-          <div className="relative bottom-10">
-            <h2 className="text-lg font-semibold mb-6 text-gray-700 text-center">
+          <div className="mb-8">
+            <h2 className="text-lg font-semibold text-gray-700 text-center mb-4">
               Recent Code Drops
             </h2>
-            <div className="relative flex left-24">
+            <div className="relative flex left-16">
               <div className="relative w-full h-40 overflow-hidden">
                 <a
                   href="https://github.com/relatablepradeep"
@@ -117,7 +118,14 @@ export default function Github() {
                              hover:bg-blue-950 hover:text-white hover:scale-110
                              cursor-pointer shadow-md hover:shadow-lg z-[9999]"
                 >
-                  <FaGithub className="text-6xl" />
+
+                  <div className="left-10">
+
+                    <FaGithub className="text-6xl " />
+
+
+                  </div>
+                  
                 </a>
 
                 {repos.map((repo, index) => (
@@ -165,65 +173,70 @@ export default function Github() {
           </div>
         )}
 
-        {error && (
-          <div className="mb-4 p-3 bg-yellow-100 border border-yellow-300 rounded text-yellow-800 text-sm">
-            {error}
-          </div>
-        )}
-
-        <div className="flex items-center space-x-5 p-6 text-sm text-gray-600">
-          <span>Less</span>
-          <div className="flex gap-1">
-            <div className="w-3 h-3 bg-gray-200 rounded-sm"></div>
-            <div className="w-3 h-3 bg-green-200 rounded-sm"></div>
-            <div className="w-3 h-3 bg-green-400 rounded-sm"></div>
-            <div className="w-3 h-3 bg-green-600 rounded-sm"></div>
-            <div className="w-3 h-3 bg-green-800 rounded-sm"></div>
-          </div>
-          <span>More</span>
-        </div>
-
-        <div className="grid grid-cols-7 gap-2 mb-2">
-          {weekdayNames.map((day) => (
-            <div
-              key={day}
-              className="text-center font-medium text-sm text-gray-500 h-6 flex items-center justify-center"
-            >
-              {day}
+        
+        <div className="w-full max-w-3md ml-14">
+          {error && (
+            <div className="mb-4 p-3 bg-yellow-100 border border-yellow-300 rounded text-yellow-800 text-sm">
+              {error}
             </div>
-          ))}
-        </div>
+          )}
 
-        <div className="grid grid-cols-7 gap-2 p-4 bg-white rounded-xl shadow-sm border">
-          {last30Days.map((day) => (
-            <div
-              key={day.date}
-              onMouseEnter={(e) => {
-                const rect = e.currentTarget.getBoundingClientRect();
-                setTooltip({
-                  date: `${formatDate(day.date)} - ${day.contributionCount} contribution${
-                    day.contributionCount !== 1 ? "s" : ""
-                  }`,
-                  x: rect.left + rect.width / 2,
-                  y: rect.top - 8,
-                });
-              }}
-              onMouseLeave={() => setTooltip(null)}
-              className={`w-8 h-8 rounded-md cursor-pointer transition-all duration-200 border border-gray-100 ${getContributionColor(
-                day.contributionCount
-              )} transform hover:scale-110 hover:shadow-sm`}
-            />
-          ))}
-        </div>
-
-        <div className="mt-6 grid grid-cols-2 gap-4">
-          <div className="bg-white p-4 rounded-lg shadow-sm border">
-            <div className="text-2xl font-bold text-blue-600">{totalContributions}</div>
-            <div className="text-sm text-gray-500">Total contributions (last 365 days)</div>
+          {/* Legend - Contained within contributions section */}
+          <div className="flex items-center  space-x-2 mb-4 p-2 text-xs text-gray-600">
+            <span>Less</span>
+            <div className="flex gap-1">
+              <div className="w-2.5 h-2.5 bg-gray-200 rounded-sm"></div>
+              <div className="w-2.5 h-2.5 bg-green-200 rounded-sm"></div>
+              <div className="w-2.5 h-2.5 bg-green-400 rounded-sm"></div>
+              <div className="w-2.5 h-2.5 bg-green-600 rounded-sm"></div>
+              <div className="w-2.5 h-2.5 bg-green-800 rounded-sm"></div>
+            </div>
+            <span>More</span>
           </div>
-          <div className="bg-white p-4 rounded-lg shadow-sm border">
-            <div className="text-2xl font-bold text-green-600">{streak}</div>
-            <div className="text-sm text-gray-500">Current 30-day contribution streak</div>
+
+          <div className="grid grid-cols-7  mb-2 mr-10">
+            {weekdayNames.map((day) => (
+              <div
+                key={day}
+                className="text-center font-medium text-xs text-gray-500 h-4 flex items-center justify-center"
+              >
+                {day}
+              </div>
+            ))}
+          </div>
+
+          <div className="grid grid-cols-7 gap-1 p-3 bg-white rounded-xl shadow-sm border mb-3">
+            {last30Days.map((day) => (
+              <div
+                key={day.date}
+                onMouseEnter={(e) => {
+                  const rect = e.currentTarget.getBoundingClientRect();
+                  setTooltip({
+                    date: `${formatDate(day.date)} - ${day.contributionCount} contribution${
+                      day.contributionCount !== 1 ? "s" : ""
+                    }`,
+                    x: rect.left + rect.width / 2,
+                    y: rect.top - 8,
+                  });
+                }}
+                onMouseLeave={() => setTooltip(null)}
+                className={`w-6 h-6 rounded-md cursor-pointer transition-all duration-200 border border-gray-100 ${getContributionColor(
+                  day.contributionCount
+                )} transform hover:scale-110 hover:shadow-sm`}
+              />
+            ))}
+          </div>
+
+          {/* Stats - Contained within contributions section */}
+          <div className="grid grid-cols-2 gap-3">
+            <div className="bg-white p-3 rounded-lg shadow-sm border">
+              <div className="text-xl font-bold text-blue-600">{totalContributions}</div>
+              <div className="text-xs text-gray-500">Total contributions (last 365 days)</div>
+            </div>
+            <div className="bg-white p-3 rounded-lg shadow-sm border">
+              <div className="text-xl font-bold text-green-600">{streak}</div>
+              <div className="text-xs text-gray-500">Current 30-day contribution streak</div>
+            </div>
           </div>
         </div>
 
