@@ -18,7 +18,7 @@ export default function Nav() {
         </div>
 
         <button className="font-bold border-2 lg:text-xl rounded-xl h-20 w-36 mt-5 mb-3 relative left-28">
-          <Link href="/">Let's Chat</Link>
+          <Link href="/">Let&apos;s Chat</Link>
         </button>
       </main>
     </header>
