@@ -11,10 +11,14 @@ export default function Nav() {
         </div>
 
         <div className="relative space-x-36 top-10 font-extralight text-2xl">
+
+          
           <Link href="/Home">Home</Link>
           <Link href="/Project">Project</Link>
           <Link href="/About">About me</Link>
           <Link href="/">Blog</Link>
+
+
         </div>
 
         <button className="font-bold border-2 lg:text-xl rounded-xl h-20 w-36 mt-5 mb-3 relative left-28">
