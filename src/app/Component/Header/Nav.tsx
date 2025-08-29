@@ -2,28 +2,33 @@ import Link from "next/link";
 
 export default function Nav() {
   return (
-    <header className="border-0 shadow sticky top-0 z-50 text-black bg-gray-100 hidden md:block h-28">
-      <main className="flex justify-evenly">
-        <div>
-          <Link className="text-3xl top-10 relative lg:right-25" href="/">
+    <header className="hidden md:block border-0 shadow sticky top-0 z-50 text-black bg-gray-100 w-full">
+      <main className="flex items-center justify-between h-20 lg:h-24 px-6 lg:px-12 max-w-screen-xl mx-auto">
+        
+        {/* Left: Logo */}
+        <div  className="relative lg:right-76">
+          <Link className="text-2xl lg:text-3xl font-bold" href="/">
             Pradeep
           </Link>
         </div>
 
-        <div className="relative space-x-36 top-10 font-extralight text-2xl">
-
-          
+        {/* Center: Nav Links */}
+        <nav className="flex space-x-6 lg:space-x-16 font-light text-lg lg:text-2xl">
           <Link href="/Home">Home</Link>
           <Link href="/Project">Project</Link>
           <Link href="/About">About me</Link>
           <Link href="/">Blog</Link>
+        </nav>
 
-
+        {/* Right: Button */}
+        <div className="relative lg:left-64">
+          <Link href="/">
+            <button className="font-bold border-2  text-sm lg:text-lg rounded-xl px-4 py-2 lg:px-6 lg:py-3">
+              Let&apos;s Chat
+            </button>
+          </Link>
         </div>
 
-        <button className="font-bold border-2 lg:text-xl rounded-xl h-20 w-36 mt-5 mb-3 relative left-28">
-          <Link href="/">Let&apos;s Chat</Link>
-        </button>
       </main>
     </header>
   );

@@ -111,7 +111,7 @@ export default function Email() {
            <div className="relative px-2 lg:bottom-30">
   <div
     className="border-white shadow-md border-2 bg-white rounded-md
-      md:h-24 lg:h-28    w-full max-w-full"
+       lg:h-28    w-full max-w-full"
   >
     <div className="flex items-center h-full">
       <input
@@ -138,7 +138,7 @@ export default function Email() {
         <div className="flex items-center justify-center h-full w-full">
           <ArrowUpRight
             size={20}
-            className="h-6 md:h-10 lg:h-12 xl:h-14 text-gray-400 transition-all duration-500 ease-out transform hover:text-blue-500 hover:scale-110"
+            className="h-6  lg:h-12 xl:h-14 text-gray-400 transition-all duration-500 ease-out transform hover:text-blue-500 hover:scale-110"
           />
         </div>
       </button>
