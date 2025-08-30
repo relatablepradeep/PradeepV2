@@ -26,9 +26,23 @@ export default function SocialMediaPanel() {
         className="
           grid 
           md:grid-cols-2 
-          gap-4 
-          w-full
-          max-w-5xl
+gap-4
+
+
+          md:w-full
+          lg:w-full
+          xl:max-w-5xl
+          2xl:w-full
+
+
+          p-3
+        
+          
+
+
+          
+        
+          
         "
       >
         {icons.map(({ id, icon, color, label, handle }) => (
@@ -36,9 +50,9 @@ export default function SocialMediaPanel() {
             key={id}
             onClick={() => setActive(id)}
             className={`
-              flex items-center gap-4 
-               lg:p-4 
-               md:w-80 lg:w-80
+              flex items-center 
+              p-4
+              2xl:w-auto
               rounded-xl shadow-md 
               transition-all duration-300 transform 
               hover:scale-105 
