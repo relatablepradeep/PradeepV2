@@ -22,7 +22,7 @@ export default function Typing() {
       <TypeAnimation
         sequence={TEXTS.flatMap(text => [text, 1000])}
         style={{
-          fontSize: '2em',
+          fontSize: '1em',
           display: 'inline-block',
           whiteSpace: 'nowrap',
         }}
