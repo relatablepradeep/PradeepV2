@@ -21,7 +21,7 @@ export default function SocialMediaPanel() {
   ];
 
   return (
-    <div className="hidden md:flex flex-col   items-center">
+    <div className="hidden md:flex flex-col     items-center">
       <div
         className="
           grid 

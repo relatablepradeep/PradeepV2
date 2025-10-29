@@ -23,23 +23,22 @@ export default function MyHome() {
 
   return (
     <main className="fixed left-0 w-1/2 h-screen hidden md:block bg-amber-50">
-      <div className="flex p-6  2xl:p-14  ">
-        <div className="relative inline-block  ">
+      <div className="flex   2xl:p-14   xl:p-12   lg:p-8 relative 2xl:bottom-8 xl:bottom-6 lg:bottom-4 ">
+        <div className="relative inline-block   ">
           <Image
             src={Photo}
-            width={150}
-            height={150}
+           
             alt="author"
-            className="rounded-full shadow-lg  lg:h-52 lg:w-52  xl:h-52 xl:w-52   2xl:w-52 2xl:h-52"
+            className="rounded-full shadow-lg  lg:h-36 lg:w-36  xl:h-42 xl:w-42   2xl:w-42 2xl:h-42 "
           />
 
           {/* Flag on top of photo */}
           <div className="absolute    z-20">
-            <Flag code="IN" className="md:w-12 md:h-8   lg:w-16 lg:h-12 lg:bottom-52   xl:h-16 xl:w-20   2xl:w-20 2xl:h-24 xl:bottom-52  2xl:bottom-56 lg:rounded rounded shadow-lg relative md:bottom-37" />
+            <Flag code="IN" className="md:w-12 md:h-8   lg:w-16 lg:h-12 lg:bottom-52   xl:h-16 xl:w-16   2xl:w-16 2xl:h-24 xl:bottom-44  2xl:bottom-48 lg:rounded rounded shadow-lg relative md:bottom-37" />
           </div>
         </div>
 
-        <div className="md:text-2xl text-black   lg:text-4xl lg:top-20 2xl:text-6xl xl:text-5xl   2xl:top-18 xl:top-16  2xl:left-12 xl:left-12   relative   md:top-16 md:left-6">
+        <div className="md:text-2xl text-black   lg:text-3xl lg:top-20 2xl:text-5xl xl:text-5xl   2xl:top-12 xl:top-12  2xl:left-12 xl:left-14   relative   md:top-16 md:left-6">
 
           <h2 className="  ">Pradeep!</h2>
           <div className="md:w-32 md:h-28 lg:text-3xl overflow-hidden md:text-sm text-black">
@@ -59,10 +58,9 @@ export default function MyHome() {
 
 
 
-      <div className="flex ">
+      <div className="flex relative  xl:bottom-14 2xl:bottom-18 lg:bottom-10 ">
 
-        <div  className="md:pl-7 md:text-xl md:space-y-2 md:pt-4     lg:pl-8 lg:text-2xl lg:space-y-3 lg:pt-3  2xl:pl-16 2xl:text-3xl  2xl:space-y-4  2xl:mb-7   ">
-
+        <div  className="md:pl-7 md:text-xl md:space-y-2 md:pt-4     lg:pl-8 lg:text-2xl xl:text-2xl lg:space-y-3 lg:pt-3   2xl:pl-16 2xl:text-xl  2xl:space-y-4  2xl:mb-7 2xl:ml-0 xl:ml-5   ">
 
 
 
@@ -108,17 +106,26 @@ export default function MyHome() {
 
 
 
+
+
+
+
       </div>
 
 
 
+        <div className="relative xl:bottom-10 2xl:bottom-22">
 
-      <div>
+                  <Social/>
+
+
+        </div>
+
+
+
 
        
-          <Social/>
         
-      </div>
 
 
 
