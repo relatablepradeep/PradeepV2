@@ -23,25 +23,25 @@ export default function MyHome() {
 
   return (
     <main className="fixed left-0 w-1/2 h-screen hidden md:block bg-amber-50">
-      <div className="flex   2xl:p-14   xl:p-12   lg:p-8 relative 2xl:bottom-8 xl:bottom-6 lg:bottom-4 ">
+      <div className="flex   2xl:p-14   xl:p-12   lg:p-8 relative 2xl:bottom-8 xl:bottom-6 lg:bottom-4 md:p-8 ">
         <div className="relative inline-block   ">
           <Image
             src={Photo}
            
             alt="author"
-            className="rounded-full shadow-lg  lg:h-36 lg:w-36  xl:h-42 xl:w-42   2xl:w-42 2xl:h-42 "
+            className="rounded-full shadow-lg  lg:h-36 lg:w-36  xl:h-42 xl:w-42   2xl:w-42 2xl:h-42   md:w-36 md:h-36  "
           />
 
           {/* Flag on top of photo */}
           <div className="absolute    z-20">
-            <Flag code="IN" className="md:w-12 md:h-8   lg:w-16 lg:h-12 lg:bottom-52   xl:h-16 xl:w-16   2xl:w-16 2xl:h-24 xl:bottom-44  2xl:bottom-48 lg:rounded rounded shadow-lg relative md:bottom-37" />
+            <Flag code="IN" className="md:w-12 md:h-8   lg:w-16 lg:h-12 lg:bottom-52   xl:h-16 xl:w-16   2xl:w-16 2xl:h-24 xl:bottom-44  2xl:bottom-48  xl:rounded 2xl:rounded  lg:rounded rounded shadow-lg relative md:bottom-35" />
           </div>
         </div>
 
-        <div className="md:text-2xl text-black   lg:text-3xl lg:top-20 2xl:text-5xl xl:text-5xl   2xl:top-12 xl:top-12  2xl:left-12 xl:left-14   relative   md:top-16 md:left-6">
+        <div className="md:text-2xl  text-black   lg:text-2xl lg:top-12 2xl:text-5xl xl:text-5xl   2xl:top-12 xl:top-12  2xl:left-12 xl:left-14   relative   md:top-12 md:left-8">
 
           <h2 className="  ">Pradeep!</h2>
-          <div className="md:w-32 md:h-28 lg:text-3xl overflow-hidden md:text-sm text-black">
+          <div className="md:w-32 md:h-28 lg:text-2xl overflow-hidden md:text-sm  text-black">
             <Typing />
           </div>
         </div>
@@ -58,9 +58,9 @@ export default function MyHome() {
 
 
 
-      <div className="flex relative  xl:bottom-14 2xl:bottom-18 lg:bottom-10 ">
+      <div className="flex relative  xl:bottom-14 2xl:bottom-18 lg:bottom-4 md:bottom-2 ">
 
-        <div  className="md:pl-7 md:text-xl md:space-y-2 md:pt-4     lg:pl-8 lg:text-2xl xl:text-2xl lg:space-y-3 lg:pt-3   2xl:pl-16 2xl:text-xl  2xl:space-y-4  2xl:mb-7 2xl:ml-0 xl:ml-5   ">
+        <div  className="md:ml-10 lg:ml-2 md:text-lg  md:space-y-2 md:pt-4     lg:pl-10 lg:text-xl xl:text-2xl lg:space-y-3 lg:pt-3   2xl:pl-16 2xl:text-xl  2xl:space-y-4  2xl:mb-7 2xl:ml-0 xl:ml-5   ">
 
 
 
@@ -114,7 +114,7 @@ export default function MyHome() {
 
 
 
-        <div className="relative xl:bottom-10 2xl:bottom-22">
+        <div className="relative xl:bottom-10 2xl:bottom-22  md:top-9 lg:top-4">
 
                   <Social/>
 

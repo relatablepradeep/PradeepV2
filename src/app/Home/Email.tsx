@@ -108,12 +108,12 @@ export default function Email() {
               <Animation />
             </div>
 
-           <div className="relative px-2 lg:bottom-30">
+           <div className="relative px-2 lg:bottom-30  md:bottom-26 ">
   <div
     className="border-white shadow-md border-2 bg-white rounded-md
-       lg:h-28    w-full max-w-full"
+       lg:h-28 md:h-23    w-full max-w-full"
   >
-    <div className="flex items-center h-full">
+    <div className="flex items-center h-full relative ">
       <input
         type="email"
         value={email}
