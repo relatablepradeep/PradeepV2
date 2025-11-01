@@ -95,31 +95,32 @@ export default function Github() {
   const totalContributions = data.reduce((sum, day) => sum + day.contributionCount, 0);
 
   return (
-    // Hidden on mobile, visible on tablet, iPad, and HP Victus
-    <div className="hidden md:block fixed top-0 left-0 w-1/2 min-h-screen p-8 bg-gradient-to-br from-gray-50 to-gray-100">
-      <div className="max-w-md relative top-25 left-16">
+
+
+    <div className="hidden md:block fixed top-0 left-0 w-1/2 min-h-screen  bg-gradient-to-br from-gray-50 to-gray-100">
+      <div className="2xl:max-w-4md   relative 2xl:top-30 xl:top-36 2xl:left-36 xl:left-26  lg:top-36 md:top-22  ">
       
         {repos.length > 0 && (
-          <div className="mb-8">
-            <h2 className="text-lg font-semibold text-gray-700 text-center mb-4">
+          <div className=" relative mb-4  lg:right-6 xl:right-39  2xl:ml-14   ">
+            <h2 className="text-lg  font-semibold text-gray-700 text-center mb-4">
               Recent Code Drops
             </h2>
-            <div className="relative flex left-16">
-              <div className="relative w-full h-40 overflow-hidden">
+            <div className="relative flex  lg:left-36   ">
+              <div className="relative w-full h-40     overflow-hidden ">
                 <a
                   href="https://github.com/relatablepradeep"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="absolute top-1/2 left-15 -translate-x-1/2 -translate-y-1/2
+                  className="absolute top-1/2  -translate-x-1/2 -translate-y-1/2
                              flex items-center justify-center
-                             w-25 h-25 border-2 rounded-full
+                             w-25 h-25  md:h-20 md:w-20 border-2 rounded-full  xl:left-29 2xl:left-13  lg:left-12 md:left-18 md:top
                              bg-gray-200 text-gray-700
                              transition-all duration-300
                              hover:bg-blue-950 hover:text-white hover:scale-110
                              cursor-pointer shadow-md hover:shadow-lg z-[9999]"
                 >
 
-                  <div className="left-10">
+                  <div className="">
 
                     <FaGithub className="text-6xl " />
 
@@ -131,7 +132,7 @@ export default function Github() {
                 {repos.map((repo, index) => (
                   <div
                     key={repo.name}
-                    className="absolute w-full transition-transform duration-700 ease-in-out mt-5"
+                    className="absolute  transition-transform duration-700 ease-in-out  2xl:mt-5 xl:mt-4 2xl:left-30 xl:left-44  lg:left-26 md:left-32 "
                     style={{
                       transform: `translateY(${(index - currentIndex) * 100}%)`,
                       opacity: index === currentIndex ? 1 : 0,
@@ -174,7 +175,7 @@ export default function Github() {
         )}
 
         
-        <div className="w-full max-w-3md ml-14">
+        <div className=" max-w-md  md:max-w-xs xl:ml-14   lg:ml-29 md:ml-22  lg:max-w-md ">
           {error && (
             <div className="mb-4 p-3 bg-yellow-100 border border-yellow-300 rounded text-yellow-800 text-sm">
               {error}

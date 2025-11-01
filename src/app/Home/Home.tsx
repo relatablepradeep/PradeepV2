@@ -114,7 +114,7 @@ export default function MyHome() {
 
 
 
-        <div className="relative xl:bottom-10 2xl:bottom-22  md:top-9 lg:top-4">
+        <div className="relative xl:-top-12 2xl:-top-22  md:top-9 lg:top-4">
 
                   <Social/>
 

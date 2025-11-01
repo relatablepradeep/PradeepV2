@@ -7,7 +7,7 @@ export async function GET() {
 
     const today = new Date();
     const start = new Date();
-    start.setDate(today.getDate() - 48); // last 49 days
+    start.setDate(today.getDate() - 30); 
 
     const query = `
       query {
