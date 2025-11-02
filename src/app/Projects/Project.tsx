@@ -12,49 +12,6 @@ type Project = {
   githubUrl: string;
 };
 
-const projects: Project[] = [
-  { 
-    title: "Ayurvedic Wellness", 
-    color: "bg-green-500",
-    emoji: "🌿",
-    description: "A comprehensive wellness platform combining ancient Ayurvedic wisdom with modern health tracking to promote holistic well-being.",
-    liveUrl: "#",
-    githubUrl: "#"
-  },
-  { 
-    title: "Health Tracker", 
-    color: "bg-red-500",
-    emoji: "❤️",
-    description: "Real-time health monitoring dashboard with AI-powered insights for tracking vitals, medication, and fitness goals.",
-    liveUrl: "#",
-    githubUrl: "#"
-  },
-  { 
-    title: "Energy Dashboard", 
-    color: "bg-yellow-500",
-    emoji: "⚡",
-    description: "Smart energy management system for monitoring and optimizing power consumption in residential and commercial spaces.",
-    liveUrl: "#",
-    githubUrl: "#"
-  },
-  { 
-    title: "Security Suite", 
-    color: "bg-blue-500",
-    emoji: "🔒",
-    description: "Enterprise-grade security platform with advanced threat detection, encryption, and multi-factor authentication.",
-    liveUrl: "#",
-    githubUrl: "#"
-  },
-  { 
-    title: "Travel Planner", 
-    color: "bg-purple-500",
-    emoji: "✈️",
-    description: "AI-powered travel companion that creates personalized itineraries, tracks expenses, and provides local recommendations.",
-    liveUrl: "#",
-    githubUrl: "#"
-  },
-];
-
 export default function Project() {
   const [isMobile, setIsMobile] = useState(false);
   const [offset, setOffset] = useState(0);
@@ -63,7 +20,48 @@ export default function Project() {
   const [startOffset, setStartOffset] = useState(0);
   const [expandedProject, setExpandedProject] = useState<(Project & { index: number }) | null>(null);
   const [isAnimating, setIsAnimating] = useState(false);
+  const [projects, setProjects] = useState<Project[]>([]);
   const containerRef = useRef<HTMLDivElement | null>(null);
+
+  const githubUsername = "your-github-username"; // 👈 Replace this with your GitHub username
+
+  // ✅ Fetch GitHub Repositories dynamically
+  useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        const response = await fetch(`https://api.github.com/users/relatablepradeep/repos`);
+        const data = await response.json();
+
+        const colors = [
+          "bg-blue-500",
+          "bg-green-500",
+          "bg-red-500",
+          "bg-yellow-500",
+          "bg-purple-500",
+          "bg-pink-500",
+          "bg-indigo-500",
+        ];
+        const emojis = ["🚀", "💻", "🌿", "⚡", "🧠", "📊", "🔒", "🌎", "✨"];
+
+        const formatted = data
+          .filter((repo: any) => !repo.fork) // skip forks
+          .map((repo: any, i: number) => ({
+            title: repo.name,
+            color: colors[i % colors.length],
+            emoji: emojis[i % emojis.length],
+            description: repo.description || "No description available.",
+            liveUrl: repo.homepage || repo.html_url,
+            githubUrl: repo.html_url,
+          }));
+
+        setProjects(formatted);
+      } catch (err) {
+        console.error("Failed to fetch GitHub projects:", err);
+      }
+    };
+
+    fetchProjects();
+  }, []);
 
   // ✅ detect mobile
   useEffect(() => {
@@ -83,7 +81,6 @@ export default function Project() {
 
   const handleMove = (clientY: number) => {
     if (!isDragging || expandedProject) return;
-    
     const deltaY = clientY - startY;
     const newOffset = startOffset + deltaY * 1.2;
     setOffset(newOffset);
@@ -93,7 +90,7 @@ export default function Project() {
     setIsDragging(false);
   };
 
-  // Mouse & Touch events on container
+  // Mouse & Touch events
   const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault();
     handleStart(e.clientY);
@@ -103,7 +100,7 @@ export default function Project() {
     handleStart(e.touches[0].clientY);
   };
 
-  // ✅ Global listeners (fixed eslint warning)
+  // ✅ Global listeners (no UI change)
   useEffect(() => {
     if (isDragging) {
       const onMouseMove = (e: MouseEvent) => handleMove(e.clientY);
@@ -130,10 +127,8 @@ export default function Project() {
 
   const handleProjectClick = (project: Project, projectIndex: number) => {
     if (isDragging || isAnimating) return;
-    
     setIsAnimating(true);
     setExpandedProject({ ...project, index: projectIndex });
-    
     setTimeout(() => setIsAnimating(false), 300);
   };
 
@@ -145,6 +140,7 @@ export default function Project() {
     }, 300);
   };
 
+  // 🧩 Desktop warning remains unchanged
   if (!isMobile) {
     return (
       <div className="fixed inset-0 flex items-center justify-center bg-white">
@@ -167,11 +163,14 @@ export default function Project() {
     );
   }
 
-  // Create infinite loop effect
+  // ✅ Infinite loop carousel logic (unchanged)
   const getVisibleProjects = () => {
+    if (projects.length === 0) return [];
     const result: (Project & { key: number; originalIndex: number })[] = [];
     for (let i = 0; i < 4; i++) {
-      const projectIndex = (projects.length - 1 - Math.floor(offset / 140) - i + projects.length * 1000) % projects.length;
+      const projectIndex =
+        (projects.length - 1 - Math.floor(offset / 140) - i + projects.length * 1000) %
+        projects.length;
       result.push({
         ...projects[projectIndex],
         key: Math.floor(offset / 140) + i,
@@ -216,16 +215,11 @@ export default function Project() {
           {visibleProjects.map((proj, i) => {
             const baseY = i * 140 + smoothOffset;
             const translateY = baseY;
-
             const normalizedPos = ((i * 140 + smoothOffset) / 140) % 3;
             let translateZ;
-            if (normalizedPos < 1) {
-              translateZ = -120 + normalizedPos * 240;
-            } else if (normalizedPos < 2) {
-              translateZ = 100 - (normalizedPos - 1) * 240;
-            } else {
-              translateZ = -120;
-            }
+            if (normalizedPos < 1) translateZ = -120 + normalizedPos * 240;
+            else if (normalizedPos < 2) translateZ = 100 - (normalizedPos - 1) * 240;
+            else translateZ = -120;
 
             const distanceFromCenter = Math.abs(translateY - 140);
             const scale = Math.max(0.8, 1 - distanceFromCenter / 400);
@@ -272,7 +266,6 @@ export default function Project() {
             }`}
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Close button */}
             <button
               onClick={closeExpanded}
               aria-label="Close modal"
@@ -282,7 +275,6 @@ export default function Project() {
               <X size={20} className="text-gray-600" />
             </button>
 
-            {/* Project content */}
             <div className="space-y-6">
               <div className="text-center space-y-3">
                 <div className="text-6xl animate-pulse">{expandedProject.emoji}</div>
@@ -296,6 +288,8 @@ export default function Project() {
               <div className="flex justify-between items-center pt-4">
                 <a
                   href={expandedProject.liveUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="flex items-center space-x-2 px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-all duration-200 hover:scale-105 active:scale-95"
                   onClick={(e) => e.stopPropagation()}
                 >
@@ -305,6 +299,8 @@ export default function Project() {
 
                 <a
                   href={expandedProject.githubUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="flex items-center space-x-2 px-4 py-2 bg-gray-800 hover:bg-gray-900 text-white rounded-lg transition-all duration-200 hover:scale-105 active:scale-95"
                   onClick={(e) => e.stopPropagation()}
                 >
@@ -317,7 +313,7 @@ export default function Project() {
         </div>
       )}
 
-      {/* Custom CSS for floating animation */}
+      {/* Floating Animation CSS */}
       <style jsx>{`
         @keyframes float {
           0%, 100% {

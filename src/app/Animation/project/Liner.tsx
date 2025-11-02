@@ -1,237 +1,222 @@
 'use client'
 
 import React, { useState, useEffect } from 'react';
-import { Github, ExternalLink, ArrowUpRight } from 'lucide-react';
+import { Github, ExternalLink, Code2, Globe, ChevronLeft, ChevronRight } from 'lucide-react';
 
-// Project Type
 interface Project {
   id: number;
   name: string;
-  emoji: string;
   overview: string;
   techStack: string[];
   githubUrl: string;
   liveUrl: string;
+  language?: string;
 }
 
-// Props for ProjectCard
 interface ProjectCardProps {
   project: Project;
-  isExpanded: boolean;
-  onToggle: () => void;
-  isHidden: boolean;
   index: number;
 }
 
-const ProjectCard: React.FC<ProjectCardProps> = ({ project, isExpanded, onToggle, isHidden, index }) => {
+const ProjectCard: React.FC<ProjectCardProps> = ({ project, index }) => {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsVisible(true);
-    }, index * 200);
+    }, index * 150);
     return () => clearTimeout(timer);
   }, [index]);
 
-  const getEntranceDirection = (index: number): 'left' | 'right' | 'top' | 'bottom' => {
-    const directions: Array<'left' | 'right' | 'top' | 'bottom'> = ['left', 'right', 'top', 'bottom'];
-    return directions[index % 4];
+  const handleCardClick = () => {
+    window.open(project.githubUrl, '_blank', 'noopener,noreferrer');
   };
 
-  const direction = getEntranceDirection(index);
-
-  const entranceClass: Record<'left' | 'right' | 'top' | 'bottom', string> = {
-    left: 'translate-x-[-100%]',
-    right: 'translate-x-[100%]',
-    top: 'translate-y-[-100%]',
-    bottom: 'translate-y-[100%]'
+  const handleLiveClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (project.liveUrl) {
+      window.open(project.liveUrl, '_blank', 'noopener,noreferrer');
+    }
   };
-
-  const visibleClass = 'translate-x-0 translate-y-0';
-
-  if (isHidden) {
-    return (
-      <div className={`mb-6 transition-all duration-700 ease-out transform opacity-0 scale-75`} />
-    );
-  }
 
   return (
-    <div className={`mb-6 transition-all duration-700 ease-out transform ${
-      isVisible ? `opacity-100 ${visibleClass}` : `opacity-0 ${entranceClass[direction]}`
-    } ${isExpanded ? 'scale-105' : 'scale-100'}`}>
-
-      {/* Header Section */}
-      <div className="p-4">
-        <div className="flex items-center justify-between">
-          <h2
-            className={`text-xl font-semibold text-gray-800 cursor-pointer transition-all duration-500 ease-out transform ${
-              isExpanded ? 'opacity-0 scale-75' : 'hover:text-blue-600'
-            }`}
-            onClick={onToggle}
-          >
-            {project.name}
-          </h2>
-          <div className={`flex items-center gap-3 transition-all duration-500 ease-out transform ${
-            isExpanded ? 'opacity-0 scale-75' : 'opacity-100 scale-100'
-          }`}>
-            <a
-              href={project.githubUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              title="GitHub Repository"
-              className="p-2 hover:bg-gray-100 rounded-full transition-all duration-300 transform hover:scale-110"
-            >
-              <Github size={20} className="text-gray-600 hover:text-gray-800 transition-all duration-300" />
-            </a>
-            <a
-              href={project.liveUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              title="Live Demo"
-              className="p-2 hover:bg-gray-100 rounded-full transition-all duration-300 transform hover:scale-110"
-            >
-              <ExternalLink size={20} className="text-gray-600 hover:text-gray-800 transition-all duration-300" />
-            </a>
-            <ArrowUpRight
-              size={20}
-              className="text-gray-400 transition-all duration-500 ease-out transform hover:text-blue-500 hover:scale-110"
-            />
-          </div>
-        </div>
-
-        <div className={`mt-2 h-px bg-gradient-to-r from-gray-300 to-transparent transition-all duration-500 ${
-          isExpanded ? 'opacity-0' : 'opacity-100'
-        }`}></div>
-      </div>
-
-      {isExpanded && (
-        <div className="px-4 pb-4">
-          <div className="mt-2 relative">
-            <div className="absolute -inset-[3px] rounded-xl">
-              <div className="absolute inset-0 rounded-xl opacity-90 rainbow-border"></div>
-            </div>
-
-            <div className="relative bg-white rounded-xl shadow-lg border border-gray-200 p-8">
-              <div className="text-center mb-6">
-                <span className="text-6xl">{project.emoji}</span>
-              </div>
-              <h3 className="text-2xl font-bold text-gray-800 text-center mb-4">
+    <div className={`transition-all duration-700 ease-out transform ${
+      isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+    }`}>
+      <div 
+        onClick={handleCardClick}
+        className="group relative bg-gradient-to-br from-white to-gray-50 rounded-2xl border border-gray-200 hover:border-blue-300 shadow-sm hover:shadow-xl transition-all duration-500 cursor-pointer overflow-hidden h-full"
+      >
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 via-purple-50/30 to-pink-50/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+        
+        <div className="relative p-6 flex flex-col h-full">
+          <div className="flex items-start justify-between mb-3">
+            <div className="flex-1">
+              <h3 className="text-xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors duration-300 mb-2">
                 {project.name}
               </h3>
-              <p className="text-gray-600 text-center leading-relaxed mb-6">
+              <p className="text-sm text-gray-600 line-clamp-2 leading-relaxed">
                 {project.overview}
               </p>
-              <div className="mb-8">
-                <div className="flex flex-wrap gap-2 justify-center">
-                  {project.techStack.map((tech: string, index: number) => (
-                    <span
-                      key={index}
-                      className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm font-medium"
-                    >
-                      {tech}
-                    </span>
-                  ))}
-                </div>
-              </div>
-              <div className="flex justify-end gap-4">
-                <a
-                  href={project.liveUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg transition-all duration-300 transform hover:bg-blue-700 hover:scale-105"
+            </div>
+            <div className="ml-4 p-2 bg-blue-50 rounded-lg group-hover:bg-blue-100 transition-colors duration-300">
+              <Code2 className="w-5 h-5 text-blue-600" />
+            </div>
+          </div>
+          
+          <div className="flex flex-wrap gap-2 mt-4">
+            {project.techStack.slice(0, 3).map((tech, idx) => (
+              <span
+                key={idx}
+                className="px-3 py-1 bg-gray-100 group-hover:bg-white text-gray-700 text-xs font-medium rounded-full transition-colors duration-300"
+              >
+                {tech}
+              </span>
+            ))}
+            {project.techStack.length > 3 && (
+              <span className="px-3 py-1 bg-gray-100 group-hover:bg-white text-gray-500 text-xs font-medium rounded-full">
+                +{project.techStack.length - 3}
+              </span>
+            )}
+          </div>
+
+          <div className="flex items-center gap-3 mt-auto pt-4 border-t border-gray-100">
+            <div className="flex items-center gap-2 text-sm text-gray-500">
+              <Github className="w-4 h-4" />
+              <span>Source</span>
+            </div>
+            {project.liveUrl && (
+              <>
+                <div className="w-1 h-1 bg-gray-300 rounded-full"></div>
+                <button
+                  onClick={handleLiveClick}
+                  className="flex items-center gap-2 text-sm text-gray-500 hover:text-blue-600 transition-colors duration-300"
                 >
-                  <span className="text-lg">🌐</span>
-                  <span className="font-medium">Website</span>
-                </a>
-                <a
-                  href={project.githubUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2 px-6 py-3 bg-gray-800 text-white rounded-lg transition-all duration-300 transform hover:bg-gray-700 hover:scale-105"
-                >
-                  <Github size={18} className="transition-transform duration-300 hover:rotate-12" />
-                  <span className="font-medium">Source</span>
-                </a>
-              </div>
+                  <Globe className="w-4 h-4" />
+                  <span>Live</span>
+                </button>
+              </>
+            )}
+            <div className="ml-auto">
+              <ExternalLink className="w-4 h-4 text-gray-400 group-hover:text-blue-600 transition-colors duration-300" />
             </div>
           </div>
         </div>
-      )}
+      </div>
     </div>
   );
 };
 
 const Liner: React.FC = () => {
-  const [expandedProject, setExpandedProject] = useState<number | null>(null);
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [currentPage, setCurrentPage] = useState(0);
+  const projectsPerPage = 4;
 
-  const projects: Project[] = [
-    {
-      id: 1,
-      name: "Project Ayurleaf",
-      emoji: "🩺",
-      overview: "An innovative Ayurvedic medicine platform that connects users with traditional remedies and modern healthcare solutions.",
-      techStack: ["React", "Node.js", "Express", "MongoDB", "Tailwind CSS"],
-      githubUrl: "https://github.com/yourusername/ayurleaf",
-      liveUrl: "https://ayurleaf-demo.com"
-    },
-    {
-      id: 2,
-      name: "TaskFlow Manager",
-      emoji: "📊",
-      overview: "A comprehensive project management tool with real-time collaboration features for seamless team coordination.",
-      techStack: ["React", "Express", "Socket.io", "PostgreSQL", "Redis"],
-      githubUrl: "https://github.com/yourusername/taskflow",
-      liveUrl: "https://taskflow-demo.com"
-    },
-    {
-      id: 3,
-      name: "EcoTracker",
-      emoji: "🌱",
-      overview: "Environmental impact tracking application that helps users monitor their carbon footprint and suggests sustainable alternatives.",
-      techStack: ["React", "Node.js", "Chart.js", "OpenCage API", "Firebase"],
-      githubUrl: "https://github.com/yourusername/ecotracker",
-      liveUrl: "https://ecotracker-demo.com"
-    },
-    {
-      id: 4,
-      name: "CodeCollab IDE",
-      emoji: "💻",
-      overview: "Real-time collaborative code editor with syntax highlighting, live chat, and integrated version control for pair programming.",
-      techStack: ["React", "Node.js", "Monaco Editor", "WebSocket", "Docker"],
-      githubUrl: "https://github.com/yourusername/codecollab",
-      liveUrl: "https://codecollab-demo.com"
+  useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        const res = await fetch(`https://api.github.com/users/relatablepradeep/repos`);
+        const data = await res.json();
+
+        const filtered = data.filter((repo: any) => !repo.fork);
+
+        const formatted: Project[] = filtered.map((repo: any) => ({
+          id: repo.id,
+          name: repo.name,
+          overview: repo.description || "A project showcasing innovative solutions and creative problem-solving.",
+          techStack: repo.language ? [repo.language, 'GitHub'] : ['GitHub'],
+          githubUrl: repo.html_url,
+          liveUrl: repo.homepage || "",
+          language: repo.language
+        }));
+
+        setProjects(formatted);
+      } catch (err) {
+        console.error("Error fetching GitHub repos:", err);
+      }
+    };
+
+    fetchProjects();
+  }, []);
+
+  useEffect(() => {
+    if (projects.length > projectsPerPage) {
+      const interval = setInterval(() => {
+        setCurrentPage((prev) => (prev + 1) % Math.ceil(projects.length / projectsPerPage));
+      }, 8000);
+      return () => clearInterval(interval);
     }
-  ];
+  }, [projects.length]);
 
-  const handleProjectToggle = (projectId: number) => {
-    setExpandedProject(expandedProject === projectId ? null : projectId);
+  const totalPages = Math.ceil(projects.length / projectsPerPage);
+  const currentProjects = projects.slice(currentPage * projectsPerPage, (currentPage + 1) * projectsPerPage);
+
+  const goToNextPage = () => {
+    setCurrentPage((prev) => (prev + 1) % totalPages);
+  };
+
+  const goToPrevPage = () => {
+    setCurrentPage((prev) => (prev - 1 + totalPages) % totalPages);
   };
 
   return (
-    <div className="hidden md:block">
-      <div className="max-w-4xl mx-auto px-4">
-        <div className="space-y-4">
-          {projects.map((project, index) => (
+    <div className="min-h-screen  py-12 px-4">
+      <div className="max-w-6xl mx-auto">
+      
+
+        <div className="grid gap-6 grid-cols-1 md:grid-cols-2">
+          {currentProjects.map((project, index) => (
             <ProjectCard
               key={project.id}
               project={project}
               index={index}
-              isExpanded={expandedProject === project.id}
-              onToggle={() => handleProjectToggle(project.id)}
-              isHidden={expandedProject !== null && expandedProject !== project.id}
             />
           ))}
         </div>
-        {expandedProject && (
-          <div className="text-center mt-6 animate-in fade-in slide-in-from-bottom duration-500">
+
+        {totalPages > 1 && (
+          <div className="flex items-center justify-center gap-4 mt-12">
             <button
-              onClick={() => setExpandedProject(null)}
-              className="text-blue-600 hover:text-blue-800 text-sm font-medium transition-all duration-300 transform hover:scale-105"
+              onClick={goToPrevPage}
+              className="p-3 bg-white hover:bg-gray-50 text-gray-700 rounded-full shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-110"
             >
-              ← Show all projects
+              <ChevronLeft className="w-5 h-5" />
+            </button>
+            
+            <div className="flex gap-2">
+              {Array.from({ length: totalPages }).map((_, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => setCurrentPage(idx)}
+                  className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                    currentPage === idx 
+                      ? 'bg-blue-600 w-8' 
+                      : 'bg-gray-300 hover:bg-gray-400'
+                  }`}
+                />
+              ))}
+            </div>
+            
+            <button
+              onClick={goToNextPage}
+              className="p-3 bg-white hover:bg-gray-50 text-gray-700 rounded-full shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-110"
+            >
+              <ChevronRight className="w-5 h-5" />
             </button>
           </div>
         )}
+
+        <div className="text-center mt-12 pt-8 border-t border-gray-200">
+          <a
+            href="https://linkedin.com/in/your-linkedin-username"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-semibold transition-all duration-300 hover:gap-3"
+          >
+            <span>Connect with me on LinkedIn</span>
+            <ExternalLink className="w-4 h-4" />
+          </a>
+        </div>
       </div>
     </div>
   );
