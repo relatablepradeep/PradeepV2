@@ -5,6 +5,7 @@ import Nav from "./Component/Header/Nav";
 import Email from "./Home/Email";
 import Mob_Nav from "./Component/Component/Nav/Mob_Nav";
 import "./globals.css";
+import MyHome from "./Home/Home";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -35,6 +36,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <Nav />
+        <MyHome/>
         <Email />
         {children}
         <Mob_Nav />

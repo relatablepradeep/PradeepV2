@@ -3,7 +3,7 @@ import Image from "next/image";
 export default function Myhome() {
   return (
     <main className="bg-white block sm:hidden">
-      {/* Background image */}
+
       <div className="relative w-full h-50">
         <Image
           src="/Home.jpg"
@@ -14,7 +14,7 @@ export default function Myhome() {
         />
       </div>
 
-      {/* Foreground image with rounded corners */}
+
       <div className="border-2 absolute top-36 h-28 right-72 rounded-xl overflow-hidden">
         <Image
           src="/pradeep.jpg"

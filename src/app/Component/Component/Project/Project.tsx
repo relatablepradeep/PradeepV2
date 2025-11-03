@@ -41,20 +41,24 @@ const Project = () => {
         );
         if (!response.ok) throw new Error(`GitHub API error: ${response.status}`);
 
-        const data = await response.json();
+        const data: Repo[] = await response.json();
 
         // ✅ Filter: only repos that have a homepage (live link)
         const filtered = data
-          .filter((repo: Repo) => !repo.fork && repo.homepage && repo.homepage.trim() !== "")
+          .filter((repo) => !repo.fork && repo.homepage && repo.homepage.trim() !== "")
           .sort(
-            (a: Repo, b: Repo) =>
+            (a, b) =>
               new Date(b.updated_at).getTime() -
               new Date(a.updated_at).getTime()
           )
           .slice(0, 10);
 
         setRepos(filtered);
-      } catch (err: any) {
+      } catch (err: unknown) {
+        // ✅ Safe handling of unknown errors
+        const message =
+          err instanceof Error ? err.message : "An unexpected error occurred.";
+        console.error("GitHub fetch error:", message);
         setError("Failed to load projects from GitHub.");
       } finally {
         setLoading(false);
