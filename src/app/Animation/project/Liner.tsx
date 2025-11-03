@@ -45,11 +45,11 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index }) => {
     }`}>
       <div 
         onClick={handleCardClick}
-        className="group relative bg-gradient-to-br from-white to-gray-50 rounded-2xl border border-gray-200 hover:border-blue-300 shadow-sm hover:shadow-xl transition-all duration-500 cursor-pointer overflow-hidden h-full"
+        className="group relative bg-gradient-to-br from-white to-gray-50 rounded-2xl border border-gray-200 hover:border-blue-300 shadow-sm hover:shadow-xl transition-all duration-500 cursor-pointer overflow-hidden 2xl:max-w-md xl:max-w-md lg:max-w-md md:max-w-md   "
       >
         <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 via-purple-50/30 to-pink-50/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
         
-        <div className="relative p-6 flex flex-col h-full">
+        <div className="relative p-4 flex flex-col  ">
           <div className="flex items-start justify-between mb-3">
             <div className="flex-1">
               <h3 className="text-xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors duration-300 mb-2">
@@ -64,7 +64,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index }) => {
             </div>
           </div>
           
-          <div className="flex flex-wrap gap-2 mt-4">
+          <div className="flex flex-wrap gap-1 ">
             {project.techStack.slice(0, 3).map((tech, idx) => (
               <span
                 key={idx}
@@ -80,7 +80,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index }) => {
             )}
           </div>
 
-          <div className="flex items-center gap-3 mt-auto pt-4 border-t border-gray-100">
+          <div className="flex items-center gap-1 mt-auto pt-4 border-t border-gray-100">
             <div className="flex items-center gap-2 text-sm text-gray-500">
               <Github className="w-4 h-4" />
               <span>Source</span>
@@ -160,11 +160,12 @@ const Liner: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen  py-12 px-4">
-      <div className="max-w-6xl mx-auto">
+    <div className="flex justify-center    relative  2xl:top-8 xl:top-69 lg:top-59 md:top-59 ">
+      <div className="  ">
       
 
-        <div className="grid gap-6 grid-cols-1 md:grid-cols-2">
+       <div className="grid gap-x-4 gap-y-2 p-4 grid-cols-1 md:grid-cols-2">
+
           {currentProjects.map((project, index) => (
             <ProjectCard
               key={project.id}
@@ -175,7 +176,7 @@ const Liner: React.FC = () => {
         </div>
 
         {totalPages > 1 && (
-          <div className="flex items-center justify-center gap-4 mt-12">
+          <div className="flex items-center justify-center  ">
             <button
               onClick={goToPrevPage}
               className="p-3 bg-white hover:bg-gray-50 text-gray-700 rounded-full shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-110"
@@ -206,17 +207,7 @@ const Liner: React.FC = () => {
           </div>
         )}
 
-        <div className="text-center mt-12 pt-8 border-t border-gray-200">
-          <a
-            href="https://linkedin.com/in/your-linkedin-username"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-semibold transition-all duration-300 hover:gap-3"
-          >
-            <span>Connect with me on LinkedIn</span>
-            <ExternalLink className="w-4 h-4" />
-          </a>
-        </div>
+    
       </div>
     </div>
   );

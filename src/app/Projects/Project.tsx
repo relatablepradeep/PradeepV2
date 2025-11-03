@@ -1,69 +1,28 @@
 "use client";
-import { useEffect, useState, useRef } from "react";
-import { ExternalLink, Github, X } from "lucide-react";
+import { useEffect, useState } from "react";
+import { ExternalLink, Github } from "lucide-react";
 
-// ✅ Define a Project type
-type Project = {
-  title: string;
-  color: string;
-  emoji: string;
+type Repo = {
+  id: number;
+  name: string;
   description: string;
-  liveUrl: string;
-  githubUrl: string;
+  homepage: string;
+  html_url: string;
+  language?: string;
+  updated_at?: string;
 };
 
 export default function Project() {
   const [isMobile, setIsMobile] = useState(false);
-  const [offset, setOffset] = useState(0);
+  const [repos, setRepos] = useState<Repo[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [currentIndex, setCurrentIndex] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
-  const [startY, setStartY] = useState(0);
-  const [startOffset, setStartOffset] = useState(0);
-  const [expandedProject, setExpandedProject] = useState<(Project & { index: number }) | null>(null);
-  const [isAnimating, setIsAnimating] = useState(false);
-  const [projects, setProjects] = useState<Project[]>([]);
-  const containerRef = useRef<HTMLDivElement | null>(null);
+  const [startX, setStartX] = useState(0);
+  const [dragOffset, setDragOffset] = useState(0);
 
-  const githubUsername = "your-github-username"; // 👈 Replace this with your GitHub username
-
-  // ✅ Fetch GitHub Repositories dynamically
-  useEffect(() => {
-    const fetchProjects = async () => {
-      try {
-        const response = await fetch(`https://api.github.com/users/relatablepradeep/repos`);
-        const data = await response.json();
-
-        const colors = [
-          "bg-blue-500",
-          "bg-green-500",
-          "bg-red-500",
-          "bg-yellow-500",
-          "bg-purple-500",
-          "bg-pink-500",
-          "bg-indigo-500",
-        ];
-        const emojis = ["🚀", "💻", "🌿", "⚡", "🧠", "📊", "🔒", "🌎", "✨"];
-
-        const formatted = data
-          .filter((repo: any) => !repo.fork) // skip forks
-          .map((repo: any, i: number) => ({
-            title: repo.name,
-            color: colors[i % colors.length],
-            emoji: emojis[i % emojis.length],
-            description: repo.description || "No description available.",
-            liveUrl: repo.homepage || repo.html_url,
-            githubUrl: repo.html_url,
-          }));
-
-        setProjects(formatted);
-      } catch (err) {
-        console.error("Failed to fetch GitHub projects:", err);
-      }
-    };
-
-    fetchProjects();
-  }, []);
-
-  // ✅ detect mobile
+  // ✅ Detect mobile
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth <= 768);
     checkMobile();
@@ -71,126 +30,147 @@ export default function Project() {
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
-  // Touch/Mouse event handlers for scrolling
-  const handleStart = (clientY: number) => {
-    if (expandedProject) return;
+  // ✅ Fetch GitHub repos dynamically
+  useEffect(() => {
+    const fetchRepos = async () => {
+      try {
+        const res = await fetch("https://api.github.com/users/relatablepradeep/repos");
+        if (!res.ok) throw new Error("GitHub API error");
+        const data = await res.json();
+
+        const filtered = data
+          .filter((repo: Repo) => !repo.fork && repo.homepage && repo.homepage.trim() !== "")
+          .sort(
+            (a: Repo, b: Repo) =>
+              new Date(b.updated_at || "").getTime() - new Date(a.updated_at || "").getTime()
+          );
+
+        setRepos(filtered);
+      } catch (err) {
+        setError("⚠️ Failed to fetch from GitHub API.");
+        console.error("GitHub fetch failed", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchRepos();
+  }, []);
+
+  // ✅ Auto-scroll every 5s
+  useEffect(() => {
+    if (repos.length === 0) return;
+    const interval = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % repos.length);
+    }, 5000); // 5 seconds
+    return () => clearInterval(interval);
+  }, [repos.length]);
+
+  // ✅ Swipe / Drag logic
+  const handleStart = (clientX: number) => {
     setIsDragging(true);
-    setStartY(clientY);
-    setStartOffset(offset);
+    setStartX(clientX);
+    setDragOffset(0);
   };
 
-  const handleMove = (clientY: number) => {
-    if (!isDragging || expandedProject) return;
-    const deltaY = clientY - startY;
-    const newOffset = startOffset + deltaY * 1.2;
-    setOffset(newOffset);
+  const handleMove = (clientX: number) => {
+    if (!isDragging) return;
+    const delta = clientX - startX;
+    setDragOffset(delta);
   };
 
   const handleEnd = () => {
+    if (!isDragging) return;
     setIsDragging(false);
+
+    const threshold = 80;
+    if (dragOffset > threshold) {
+      // Swipe right → previous project
+      setCurrentIndex((prev) => (prev - 1 + repos.length) % repos.length);
+    } else if (dragOffset < -threshold) {
+      // Swipe left → next project
+      setCurrentIndex((prev) => (prev + 1) % repos.length);
+    }
+    setDragOffset(0);
   };
 
-  // Mouse & Touch events
-  const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    handleStart(e.clientY);
-  };
+  const handleMouseDown = (e: React.MouseEvent) => handleStart(e.clientX);
+  const handleMouseMove = (e: MouseEvent) => handleMove(e.clientX);
+  const handleMouseUp = () => handleEnd();
+  const handleTouchStart = (e: React.TouchEvent) => handleStart(e.touches[0].clientX);
+  const handleTouchMove = (e: TouchEvent) => handleMove(e.touches[0].clientX);
+  const handleTouchEnd = () => handleEnd();
 
-  const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
-    handleStart(e.touches[0].clientY);
-  };
-
-  // ✅ Global listeners (no UI change)
   useEffect(() => {
     if (isDragging) {
-      const onMouseMove = (e: MouseEvent) => handleMove(e.clientY);
-      const onMouseUp = () => handleEnd();
-      const onTouchMove = (e: TouchEvent) => {
-        e.preventDefault();
-        handleMove(e.touches[0].clientY);
-      };
-      const onTouchEnd = () => handleEnd();
-
-      document.addEventListener("mousemove", onMouseMove);
-      document.addEventListener("mouseup", onMouseUp);
-      document.addEventListener("touchmove", onTouchMove, { passive: false });
-      document.addEventListener("touchend", onTouchEnd);
-
+      document.addEventListener("mousemove", handleMouseMove);
+      document.addEventListener("mouseup", handleMouseUp);
+      document.addEventListener("touchmove", handleTouchMove);
+      document.addEventListener("touchend", handleTouchEnd);
       return () => {
-        document.removeEventListener("mousemove", onMouseMove);
-        document.removeEventListener("mouseup", onMouseUp);
-        document.removeEventListener("touchmove", onTouchMove);
-        document.removeEventListener("touchend", onTouchEnd);
+        document.removeEventListener("mousemove", handleMouseMove);
+        document.removeEventListener("mouseup", handleMouseUp);
+        document.removeEventListener("touchmove", handleTouchMove);
+        document.removeEventListener("touchend", handleTouchEnd);
       };
     }
-  }, [isDragging, startY, startOffset]);
+  }, [isDragging, startX]);
 
-  const handleProjectClick = (project: Project, projectIndex: number) => {
-    if (isDragging || isAnimating) return;
-    setIsAnimating(true);
-    setExpandedProject({ ...project, index: projectIndex });
-    setTimeout(() => setIsAnimating(false), 300);
+  // ✅ Helper: Limit words in description
+  const truncateDescription = (text: string, limit = 20) => {
+    const words = text.split(" ");
+    if (words.length <= limit) return text;
+    return words.slice(0, limit).join(" ") + "…";
   };
 
-  const closeExpanded = () => {
-    setIsAnimating(true);
-    setTimeout(() => {
-      setExpandedProject(null);
-      setIsAnimating(false);
-    }, 300);
-  };
-
-  // 🧩 Desktop warning remains unchanged
+  // ✅ Non-mobile message
   if (!isMobile) {
     return (
-      <div className="fixed inset-0 flex items-center justify-center bg-white">
-        <div className="text-center space-y-4 p-8">
+      <div className="fixed inset-0 flex items-center justify-center bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-sky-100">
+        <div className="text-center space-y-4">
           <div className="text-6xl animate-bounce">📱</div>
-          <p className="text-gray-600 text-lg font-medium">
-            View on mobile to explore the interactive project carousel
-          </p>
-          <div className="flex justify-center space-x-2">
-            {[0, 1, 2].map((i) => (
-              <div
-                key={i}
-                className="w-2 h-2 bg-gray-400 rounded-full animate-pulse"
-                style={{ animationDelay: `${i * 0.2}s` }}
-              />
-            ))}
-          </div>
+          <p className="text-lg">View on mobile to explore the project carousel</p>
         </div>
       </div>
     );
   }
 
-  // ✅ Infinite loop carousel logic (unchanged)
-  const getVisibleProjects = () => {
-    if (projects.length === 0) return [];
-    const result: (Project & { key: number; originalIndex: number })[] = [];
-    for (let i = 0; i < 4; i++) {
-      const projectIndex =
-        (projects.length - 1 - Math.floor(offset / 140) - i + projects.length * 1000) %
-        projects.length;
-      result.push({
-        ...projects[projectIndex],
-        key: Math.floor(offset / 140) + i,
-        originalIndex: projectIndex,
-      });
-    }
-    return result;
-  };
+  // ✅ Loading / Error / Empty states
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-screen bg-transparent text-sky-400 animate-pulse text-lg">
+        Loading projects...
+      </div>
+    );
+  }
 
-  const visibleProjects = getVisibleProjects();
-  const smoothOffset = offset % 140;
+  if (error) {
+    return (
+      <div className="flex items-center justify-center h-screen bg-transparent text-red-400 font-medium">
+        {error}
+      </div>
+    );
+  }
+
+  if (repos.length === 0) {
+    return (
+      <div className="flex items-center justify-center h-screen bg-transparent text-sky-400 text-center px-6">
+        🚀 No projects found with a live link.
+        <br /> Add the homepage URL in your GitHub repo settings.
+      </div>
+    );
+  }
+
+  const currentRepo = repos[currentIndex];
 
   return (
-    <div className="fixed inset-0 overflow-hidden">
-      {/* Floating particles animation */}
+    <div className="fixed inset-0 overflow-hidden bg-transparent">
+      {/* Floating particles */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {[...Array(20)].map((_, i) => (
+        {[...Array(12)].map((_, i) => (
           <div
             key={i}
-            className="absolute w-1 h-1 bg-gradient-to-r from-blue-400 to-purple-400 rounded-full opacity-30"
+            className="absolute w-1.5 h-1.5 bg-gradient-to-r from-sky-300 to-blue-400 rounded-full opacity-40"
             style={{
               left: `${Math.random() * 100}%`,
               top: `${Math.random() * 100}%`,
@@ -201,127 +181,84 @@ export default function Project() {
         ))}
       </div>
 
-      <div
-        ref={containerRef}
-        className="relative w-full h-full flex items-center justify-center"
-        style={{ perspective: "1000px" }}
-      >
+      {/* Carousel container */}
+      <div className="relative w-full h-full flex items-center justify-center px-6 py-8">
         <div
-          className="relative w-72 h-[400px] overflow-hidden select-none touch-none"
-          style={{ cursor: expandedProject ? "default" : isDragging ? "grabbing" : "grab" }}
+          className="relative w-full max-w-md select-none"
+          style={{ cursor: isDragging ? "grabbing" : "grab" }}
           onMouseDown={handleMouseDown}
           onTouchStart={handleTouchStart}
         >
-          {visibleProjects.map((proj, i) => {
-            const baseY = i * 140 + smoothOffset;
-            const translateY = baseY;
-            const normalizedPos = ((i * 140 + smoothOffset) / 140) % 3;
-            let translateZ;
-            if (normalizedPos < 1) translateZ = -120 + normalizedPos * 240;
-            else if (normalizedPos < 2) translateZ = 100 - (normalizedPos - 1) * 240;
-            else translateZ = -120;
+          {/* Card */}
+          <div
+            className="bg-white rounded-3xl shadow-2xl border-2 border-sky-400 p-8 transition-transform duration-300 ease-out"
+            style={{
+              transform: `translateX(${dragOffset}px) scale(${isDragging ? 0.98 : 1})`,
+            }}
+          >
+            {/* Repo Name */}
+            <a
+              href={currentRepo.html_url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block mb-6"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <h2 className="text-3xl font-bold text-slate-800 hover:text-sky-600 transition-colors duration-200 text-center">
+                {currentRepo.name}
+              </h2>
+            </a>
 
-            const distanceFromCenter = Math.abs(translateY - 140);
-            const scale = Math.max(0.8, 1 - distanceFromCenter / 400);
-            const opacity = Math.max(0.1, 1 - distanceFromCenter / 250);
+            {/* Description with word limit */}
+            <p className="text-slate-600 text-center mb-8 min-h-[60px] leading-relaxed">
+              {currentRepo.description
+                ? truncateDescription(currentRepo.description, 20)
+                : "No description provided."}
+            </p>
 
-            if (translateY < -200 || translateY > 500) return null;
-
-            return (
-              <div
-                key={proj.key}
-                className={`absolute left-1/2 -translate-x-1/2 w-72 h-32 ${proj.color} text-white font-bold flex items-center justify-center rounded-xl shadow-lg cursor-pointer transition-all duration-300 hover:shadow-xl hover:scale-105 active:scale-95`}
-                style={{
-                  transform: `translateY(${translateY}px) translateZ(${translateZ}px) scale(${scale})`,
-                  opacity,
-                  zIndex: Math.floor(10 - translateY / 140),
-                  textShadow: "2px 2px 4px rgba(0,0,0,0.3)",
-                  transition: isDragging
-                    ? "none"
-                    : "transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s ease",
-                }}
-                onClick={() => handleProjectClick(proj, proj.originalIndex)}
+            {/* Action Buttons */}
+            <div className="flex gap-4 justify-center">
+              <a
+                href={currentRepo.html_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 px-6 py-3 bg-slate-800 hover:bg-slate-700 text-white rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-105"
+                onClick={(e) => e.stopPropagation()}
               >
-                <span className="text-center px-2 flex items-center space-x-2">
-                  <span className="text-2xl">{proj.emoji}</span>
-                  <span>{proj.title}</span>
+                <Github size={20} />
+                <span className="font-medium">GitHub</span>
+              </a>
+              <a
+                href={currentRepo.homepage}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 px-6 py-3 bg-sky-500 hover:bg-sky-600 text-white rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-105"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <ExternalLink size={20} />
+                <span className="font-medium">Live</span>
+              </a>
+            </div>
+
+            {/* Language badge */}
+            {currentRepo.language && (
+              <div className="mt-6 flex justify-center">
+                <span className="px-4 py-1.5 bg-sky-100 text-sky-700 rounded-full text-sm font-medium">
+                  {currentRepo.language}
                 </span>
               </div>
-            );
-          })}
+            )}
+          </div>
+
+
+         
         </div>
       </div>
 
-      {/* Expanded Project Modal */}
-      {expandedProject && (
-        <div
-          className={`fixed inset-0 bg-black/50 backdrop-blur-md flex items-center justify-center z-50 transition-all duration-300 ${
-            isAnimating ? "opacity-0" : "opacity-100"
-          }`}
-          onClick={closeExpanded}
-        >
-          <div
-            className={`bg-white rounded-2xl p-8 mx-4 max-w-md w-full shadow-2xl transform transition-all duration-300 ${
-              isAnimating ? "scale-90 opacity-0" : "scale-100 opacity-100"
-            }`}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <button
-              onClick={closeExpanded}
-              aria-label="Close modal"
-              title="Close"
-              className="absolute top-4 right-4 p-2 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors duration-200"
-            >
-              <X size={20} className="text-gray-600" />
-            </button>
-
-            <div className="space-y-6">
-              <div className="text-center space-y-3">
-                <div className="text-6xl animate-pulse">{expandedProject.emoji}</div>
-                <h2 className="text-2xl font-bold text-gray-800">{expandedProject.title}</h2>
-              </div>
-
-              <p className="text-gray-600 leading-relaxed text-center">
-                {expandedProject.description}
-              </p>
-
-              <div className="flex justify-between items-center pt-4">
-                <a
-                  href={expandedProject.liveUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center space-x-2 px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-all duration-200 hover:scale-105 active:scale-95"
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  <ExternalLink size={18} />
-                  <span className="font-medium">Live Preview</span>
-                </a>
-
-                <a
-                  href={expandedProject.githubUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center space-x-2 px-4 py-2 bg-gray-800 hover:bg-gray-900 text-white rounded-lg transition-all duration-200 hover:scale-105 active:scale-95"
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  <Github size={18} />
-                  <span className="font-medium">GitHub</span>
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Floating Animation CSS */}
       <style jsx>{`
         @keyframes float {
-          0%, 100% {
-            transform: translateY(0px) rotate(0deg);
-          }
-          50% {
-            transform: translateY(-20px) rotate(180deg);
-          }
+          0%, 100% { transform: translateY(0px) rotate(0deg); }
+          50% { transform: translateY(-20px) rotate(180deg); }
         }
       `}</style>
     </div>
