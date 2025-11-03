@@ -3,6 +3,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { Github, ExternalLink } from "lucide-react";
 
+// ✅ Type definition
 type Repo = {
   id: number;
   name: string;
@@ -12,7 +13,7 @@ type Repo = {
   language: string | null;
   topics?: string[];
   updated_at: string;
-  fork: boolean; // ✅ added missing property
+  fork: boolean; // ✅ ensures build passes
 };
 
 const Project = () => {
@@ -23,7 +24,7 @@ const Project = () => {
   const sliderRef = useRef<HTMLDivElement | null>(null);
   const isUserScrolling = useRef(false);
 
-  // ✅ detect mobile safely
+  // ✅ detect mobile
   useEffect(() => {
     if (typeof window === "undefined") return;
     const checkMobile = () => setIsMobile(window.innerWidth <= 768);
@@ -41,17 +42,16 @@ const Project = () => {
           "https://api.github.com/users/relatablepradeep/repos"
         );
 
-        if (!response.ok)
+        if (!response.ok) {
           throw new Error(`GitHub API error: ${response.status}`);
+        }
 
         const data: Repo[] = await response.json();
 
         const filtered = data
           .filter(
             (repo) =>
-              !repo.fork &&
-              repo.homepage &&
-              repo.homepage.trim() !== ""
+              !repo.fork && repo.homepage && repo.homepage.trim() !== ""
           )
           .sort(
             (a, b) =>
@@ -61,7 +61,8 @@ const Project = () => {
           .slice(0, 10);
 
         setRepos(filtered);
-      } catch {
+      } catch (err) {
+        console.error(err);
         setError("Failed to load projects from GitHub.");
       } finally {
         setLoading(false);

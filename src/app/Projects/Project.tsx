@@ -10,6 +10,7 @@ type Repo = {
   html_url: string;
   language?: string;
   updated_at?: string;
+  fork: boolean; // ✅ Added this line (fixes TypeScript error)
 };
 
 export default function Project() {
@@ -36,13 +37,17 @@ export default function Project() {
       try {
         const res = await fetch("https://api.github.com/users/relatablepradeep/repos");
         if (!res.ok) throw new Error("GitHub API error");
-        const data = await res.json();
+        const data: Repo[] = await res.json();
 
         const filtered = data
-          .filter((repo: Repo) => !repo.fork && repo.homepage && repo.homepage.trim() !== "")
+          .filter(
+            (repo: Repo) =>
+              !repo.fork && repo.homepage && repo.homepage.trim() !== ""
+          )
           .sort(
             (a: Repo, b: Repo) =>
-              new Date(b.updated_at || "").getTime() - new Date(a.updated_at || "").getTime()
+              new Date(b.updated_at || "").getTime() -
+              new Date(a.updated_at || "").getTime()
           );
 
         setRepos(filtered);
@@ -62,7 +67,7 @@ export default function Project() {
     if (repos.length === 0) return;
     const interval = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % repos.length);
-    }, 5000); // 5 seconds
+    }, 5000);
     return () => clearInterval(interval);
   }, [repos.length]);
 
@@ -82,13 +87,10 @@ export default function Project() {
   const handleEnd = () => {
     if (!isDragging) return;
     setIsDragging(false);
-
     const threshold = 80;
     if (dragOffset > threshold) {
-      // Swipe right → previous project
       setCurrentIndex((prev) => (prev - 1 + repos.length) % repos.length);
     } else if (dragOffset < -threshold) {
-      // Swipe left → next project
       setCurrentIndex((prev) => (prev + 1) % repos.length);
     }
     setDragOffset(0);
@@ -138,7 +140,7 @@ export default function Project() {
   // ✅ Loading / Error / Empty states
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-screen bg-transparent text-sky-400 animate-pulse text-lg">
+      <div className="flex items-center justify-center h-screen text-sky-400 animate-pulse text-lg">
         Loading projects...
       </div>
     );
@@ -146,7 +148,7 @@ export default function Project() {
 
   if (error) {
     return (
-      <div className="flex items-center justify-center h-screen bg-transparent text-red-400 font-medium">
+      <div className="flex items-center justify-center h-screen text-red-400 font-medium">
         {error}
       </div>
     );
@@ -154,7 +156,7 @@ export default function Project() {
 
   if (repos.length === 0) {
     return (
-      <div className="flex items-center justify-center h-screen bg-transparent text-sky-400 text-center px-6">
+      <div className="flex items-center justify-center h-screen text-sky-400 text-center px-6">
         🚀 No projects found with a live link.
         <br /> Add the homepage URL in your GitHub repo settings.
       </div>
@@ -209,7 +211,7 @@ export default function Project() {
               </h2>
             </a>
 
-            {/* Description with word limit */}
+            {/* Description */}
             <p className="text-slate-600 text-center mb-8 min-h-[60px] leading-relaxed">
               {currentRepo.description
                 ? truncateDescription(currentRepo.description, 20)
@@ -249,9 +251,6 @@ export default function Project() {
               </div>
             )}
           </div>
-
-
-         
         </div>
       </div>
 
