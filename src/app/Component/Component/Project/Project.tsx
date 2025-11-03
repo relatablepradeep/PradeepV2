@@ -12,7 +12,7 @@ type Repo = {
   language: string | null;
   topics?: string[];
   updated_at: string;
-  fork: boolean;
+  fork: boolean; // ✅ added missing property
 };
 
 const Project = () => {
@@ -23,7 +23,7 @@ const Project = () => {
   const sliderRef = useRef<HTMLDivElement | null>(null);
   const isUserScrolling = useRef(false);
 
-  // ✅ Detect mobile devices safely
+  // ✅ detect mobile safely
   useEffect(() => {
     if (typeof window === "undefined") return;
     const checkMobile = () => setIsMobile(window.innerWidth <= 768);
@@ -32,7 +32,7 @@ const Project = () => {
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
-  // ✅ Fetch GitHub repos (only those with homepage)
+  // ✅ fetch GitHub repos (only those with homepage)
   useEffect(() => {
     const fetchRepos = async () => {
       try {
@@ -41,11 +41,11 @@ const Project = () => {
           "https://api.github.com/users/relatablepradeep/repos"
         );
 
-        if (!response.ok) throw new Error(`GitHub API error: ${response.status}`);
+        if (!response.ok)
+          throw new Error(`GitHub API error: ${response.status}`);
 
         const data: Repo[] = await response.json();
 
-        // ✅ Filter: only repos that have a homepage (live link)
         const filtered = data
           .filter(
             (repo) =>
@@ -55,8 +55,8 @@ const Project = () => {
           )
           .sort(
             (a, b) =>
-              new Date(b.updated_at).getTime() -
-              new Date(a.updated_at).getTime()
+              new Date(b.updated_at || "").getTime() -
+              new Date(a.updated_at || "").getTime()
           )
           .slice(0, 10);
 
@@ -71,7 +71,7 @@ const Project = () => {
     fetchRepos();
   }, []);
 
-  // ✅ Auto-scroll effect
+  // ✅ auto-scroll for mobile
   useEffect(() => {
     if (!sliderRef.current || repos.length === 0) return;
 
@@ -108,7 +108,7 @@ const Project = () => {
     };
   }, [repos]);
 
-  // 🚫 Hide on desktop
+  // 🚫 hide on desktop
   if (!isMobile) return null;
 
   return (
@@ -167,7 +167,7 @@ const Project = () => {
                 )}
               </div>
 
-              {/* Project name */}
+              {/* Project name (linked) */}
               <a
                 href={repo.html_url}
                 target="_blank"
