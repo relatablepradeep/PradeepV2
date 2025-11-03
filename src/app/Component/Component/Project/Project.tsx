@@ -12,6 +12,7 @@ type Repo = {
   language: string | null;
   topics?: string[];
   updated_at: string;
+  fork: boolean; // ✅ Added this line
 };
 
 const Project = () => {
@@ -55,7 +56,6 @@ const Project = () => {
 
         setRepos(filtered);
       } catch (err: unknown) {
-        // ✅ Safe handling of unknown errors
         const message =
           err instanceof Error ? err.message : "An unexpected error occurred.";
         console.error("GitHub fetch error:", message);
