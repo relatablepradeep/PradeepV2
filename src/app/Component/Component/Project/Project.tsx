@@ -12,7 +12,7 @@ type Repo = {
   language: string | null;
   topics?: string[];
   updated_at: string;
-  fork: boolean; // ✅ Added this line
+  fork: boolean;
 };
 
 const Project = () => {
@@ -23,7 +23,7 @@ const Project = () => {
   const sliderRef = useRef<HTMLDivElement | null>(null);
   const isUserScrolling = useRef(false);
 
-  // ✅ detect mobile safely
+  // ✅ Detect mobile devices safely
   useEffect(() => {
     if (typeof window === "undefined") return;
     const checkMobile = () => setIsMobile(window.innerWidth <= 768);
@@ -32,7 +32,7 @@ const Project = () => {
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
-  // ✅ fetch GitHub repos (only those with homepage)
+  // ✅ Fetch GitHub repos (only those with homepage)
   useEffect(() => {
     const fetchRepos = async () => {
       try {
@@ -40,13 +40,19 @@ const Project = () => {
         const response = await fetch(
           "https://api.github.com/users/relatablepradeep/repos"
         );
+
         if (!response.ok) throw new Error(`GitHub API error: ${response.status}`);
 
         const data: Repo[] = await response.json();
 
         // ✅ Filter: only repos that have a homepage (live link)
         const filtered = data
-          .filter((repo) => !repo.fork && repo.homepage && repo.homepage.trim() !== "")
+          .filter(
+            (repo) =>
+              !repo.fork &&
+              repo.homepage &&
+              repo.homepage.trim() !== ""
+          )
           .sort(
             (a, b) =>
               new Date(b.updated_at).getTime() -
@@ -55,10 +61,7 @@ const Project = () => {
           .slice(0, 10);
 
         setRepos(filtered);
-      } catch (err: unknown) {
-        const message =
-          err instanceof Error ? err.message : "An unexpected error occurred.";
-        console.error("GitHub fetch error:", message);
+      } catch {
         setError("Failed to load projects from GitHub.");
       } finally {
         setLoading(false);
@@ -68,6 +71,7 @@ const Project = () => {
     fetchRepos();
   }, []);
 
+  // ✅ Auto-scroll effect
   useEffect(() => {
     if (!sliderRef.current || repos.length === 0) return;
 
@@ -104,7 +108,7 @@ const Project = () => {
     };
   }, [repos]);
 
-  // 🚫 hide on desktop
+  // 🚫 Hide on desktop
   if (!isMobile) return null;
 
   return (
@@ -163,7 +167,7 @@ const Project = () => {
                 )}
               </div>
 
-              {/* Project name (linked) */}
+              {/* Project name */}
               <a
                 href={repo.html_url}
                 target="_blank"
@@ -181,7 +185,7 @@ const Project = () => {
               {/* Buttons */}
               <div className="flex gap-3 items-center">
                 <a
-                  href={repo.homepage}
+                  href={repo.homepage ?? "#"}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white py-2 px-3 rounded-lg font-medium transition-all duration-300 flex items-center gap-2 shadow-lg text-sm"
