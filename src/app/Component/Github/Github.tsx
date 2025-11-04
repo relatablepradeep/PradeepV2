@@ -29,6 +29,7 @@ export default function Github() {
   const [repos, setRepos] = useState<Repository[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
 
+  // Fetch GitHub API data
   useEffect(() => {
     async function fetchData() {
       setIsLoading(true);
@@ -74,6 +75,7 @@ export default function Github() {
     }
   }, [data]);
 
+  // Helpers
   const getContributionColor = (count: number) => {
     if (count === 0) return "bg-gray-200 hover:bg-gray-300";
     if (count < 3) return "bg-green-200 hover:bg-green-300";
@@ -95,97 +97,81 @@ export default function Github() {
   const totalContributions = data.reduce((sum, day) => sum + day.contributionCount, 0);
 
   return (
+    <div className="hidden md:block fixed top-0 left-0 w-1/2 min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 overflow-y-auto 2xl:top-16 xl:top-14 lg:top-14 md:top-12">
+      <div className="flex flex-col items-center py-15 px-15  space-y-10">
+
+     
+        <h2 className="text-2xl font-bold text-gray-800 mb-5">
+          Recent Code Drops
+        </h2>
 
 
-    <div className="hidden md:block fixed top-0 left-0 w-1/2 min-h-screen  bg-gradient-to-br from-gray-50 to-gray-100">
-      <div className="2xl:max-w-4md   relative 2xl:top-30 xl:top-36 2xl:left-36 xl:left-26  lg:top-36 md:top-22  ">
-      
-        {repos.length > 0 && (
-          <div className=" relative mb-4  lg:right-6 xl:right-39  2xl:ml-14   ">
-            <h2 className="text-lg  font-semibold text-gray-700 text-center mb-4">
-              Recent Code Drops
-            </h2>
-            <div className="relative flex  lg:left-36   ">
-              <div className="relative w-full h-40     overflow-hidden ">
-                <a
-                  href="https://github.com/relatablepradeep"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="absolute top-1/2  -translate-x-1/2 -translate-y-1/2
-                             flex items-center justify-center
-                             w-25 h-25  md:h-20 md:w-20 border-2 rounded-full  xl:left-29 2xl:left-13  lg:left-12 md:left-18 md:top
-                             bg-gray-200 text-gray-700
-                             transition-all duration-300
-                             hover:bg-blue-950 hover:text-white hover:scale-110
-                             cursor-pointer shadow-md hover:shadow-lg z-[9999]"
-                >
+        <section className="flex items-center justify-center gap-5    xl:w-full  lg:w-full  md:w-full 2xl:w-full">
 
-                  <div className="">
-
-                    <FaGithub className="text-6xl " />
-
-
-                  </div>
-                  
-                </a>
-
-                {repos.map((repo, index) => (
-                  <div
-                    key={repo.name}
-                    className="absolute  transition-transform duration-700 ease-in-out  2xl:mt-5 xl:mt-4 2xl:left-30 xl:left-44  lg:left-26 md:left-32 "
-                    style={{
-                      transform: `translateY(${(index - currentIndex) * 100}%)`,
-                      opacity: index === currentIndex ? 1 : 0,
-                    }}
-                  >
-                    <div className="w-80 mx-auto bg-gradient-to-br from-blue-50 to-indigo-100 p-6 rounded-xl border-2 border-blue-200 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
-                      <a
-                        href={repo.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-blue-700 hover:text-blue-900 font-semibold text-sm line-clamp-1 block mb-2"
-                      >
-                        {repo.name}
-                      </a>
-                      {repo.description && (
-                        <p className="text-xs text-gray-600 mb-2 line-clamp-2 leading-tight">
-                          {repo.description}
-                        </p>
-                      )}
-                      {repo.primaryLanguage && (
-                        <div className="flex justify-start">
-                          <span
-                            className="inline-block px-2 py-1 text-xs rounded-full font-medium"
-                            style={{
-                              backgroundColor: repo.primaryLanguage.color || "#6B7280",
-                              color: "white",
-                              fontSize: "10px",
-                            }}
-                          >
-                            {repo.primaryLanguage.name}
-                          </span>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
+          <div className="flex flex-col items-center">
+            <a
+              href="https://github.com/relatablepradeep"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-center 2xl:w-20 2xl:h-20 border-2 border-gray-300 rounded-full bg-gray-100 text-gray-700 hover:bg-blue-900 hover:text-white transition-transform hover:scale-110"
+            >
+              <FaGithub className="text-6xl" />
+            </a>
           </div>
-        )}
+
+          <div className="relative w-full 2xl:max-w-xs  xl:max-w-xs  lg:max-w-xs md:max-w-xs 2xl:h-35 xl:h-35 lg:h-35 md:h-35 ">
+            {repos.length > 0 ? (
+              repos.map((repo, index) => (
+                <div
+                  key={repo.name}
+                  className="absolute inset-0 flex flex-col justify-center items-start transition-transform duration-700 ease-in-out bg-gradient-to-br from-blue-50 to-indigo-100 p-3 rounded-xl shadow border"
+                  style={{
+                    transform: `translateY(${(index - currentIndex) * 100}%)`,
+                    opacity: index === currentIndex ? 1 : 0,
+                  }}
+                >
+                  <a
+                    href={repo.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-700 hover:text-blue-900 font-semibold text-sm mb-2"
+                  >
+                    {repo.name}
+                  </a>
+                  {repo.description && (
+                    <p className="text-xs text-gray-600 mb-2 line-clamp-2">
+                      {repo.description}
+                    </p>
+                  )}
+                  {repo.primaryLanguage && (
+                    <span
+                      className="px-2 py-1 text-xs rounded-full font-medium text-white"
+                      style={{
+                        backgroundColor: repo.primaryLanguage.color || "#6B7280",
+                      }}
+                    >
+                      {repo.primaryLanguage.name}
+                    </span>
+                  )}
+                </div>
+              ))
+            ) : (
+              <p className="text-gray-500 text-sm">No repositories found</p>
+            )}
+          </div>
+        </section>
 
         
-        <div className=" max-w-md  md:max-w-xs xl:ml-14   lg:ml-29 md:ml-22  lg:max-w-md ">
+        <section className=" w-full 2xl:max-w-xl xl:max-w-3md">
           {error && (
             <div className="mb-4 p-3 bg-yellow-100 border border-yellow-300 rounded text-yellow-800 text-sm">
               {error}
             </div>
           )}
 
-          {/* Legend - Contained within contributions section */}
-          <div className="flex items-center  space-x-2 mb-4 p-2 text-xs text-gray-600">
+          <div className="flex items-center justify-center  mb-4 text-xs text-gray-600">
             <span>Less</span>
-            <div className="flex gap-1">
+            <div className="flex gap-2">
               <div className="w-2.5 h-2.5 bg-gray-200 rounded-sm"></div>
               <div className="w-2.5 h-2.5 bg-green-200 rounded-sm"></div>
               <div className="w-2.5 h-2.5 bg-green-400 rounded-sm"></div>
@@ -195,18 +181,18 @@ export default function Github() {
             <span>More</span>
           </div>
 
-          <div className="grid grid-cols-7  mb-2 mr-10">
+          <div className="grid grid-cols-7 mb-1 ">
             {weekdayNames.map((day) => (
               <div
                 key={day}
-                className="text-center font-medium text-xs text-gray-500 h-4 flex items-center justify-center"
+                className="text-center font-medium text-xs text-gray-500 h-4 flex items-center justify-center "
               >
                 {day}
               </div>
             ))}
           </div>
 
-          <div className="grid grid-cols-7 gap-1 p-3 bg-white rounded-xl shadow-sm border mb-3">
+          <div className="grid grid-cols-7 gap-y-5 2xl:pl-10 2xl:pt-2 xl:pb-2  xl:pl-10 xl:pt-2 2xl:pb-2 lg:pl-10 lg:pt-2 lg:pb-2    md:pl-10 md:pt-2 md:pb-2 bg-gray-50 rounded-xl border">
             {last30Days.map((day) => (
               <div
                 key={day.date}
@@ -221,26 +207,28 @@ export default function Github() {
                   });
                 }}
                 onMouseLeave={() => setTooltip(null)}
-                className={`w-6 h-6 rounded-md cursor-pointer transition-all duration-200 border border-gray-100 ${getContributionColor(
+                className={`w-6 h-6 rounded-md cursor-pointer border border-gray-200 ${getContributionColor(
                   day.contributionCount
-                )} transform hover:scale-110 hover:shadow-sm`}
+                )} hover:scale-110 transition-transform`}
               />
             ))}
           </div>
+        </section>
 
-          {/* Stats - Contained within contributions section */}
-          <div className="grid grid-cols-2 gap-3">
-            <div className="bg-white p-3 rounded-lg shadow-sm border">
-              <div className="text-xl font-bold text-blue-600">{totalContributions}</div>
+        <section className="  w-full max-w-md">
+          <div className="grid grid-cols-2 gap-2">
+            <div className="  text-center">
+              <div className="text-2xl font-bold text-blue-600">{totalContributions}</div>
               <div className="text-xs text-gray-500">Total contributions (last 365 days)</div>
             </div>
-            <div className="bg-white p-3 rounded-lg shadow-sm border">
-              <div className="text-xl font-bold text-green-600">{streak}</div>
-              <div className="text-xs text-gray-500">Current 30-day contribution streak</div>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-green-600">{streak}</div>
+              <div className="text-xs text-gray-500">Current 30-day streak</div>
             </div>
           </div>
-        </div>
+        </section>
 
+        {/* Tooltip */}
         {tooltip && (
           <div
             style={{
@@ -249,7 +237,7 @@ export default function Github() {
               left: tooltip.x,
               transform: "translate(-50%, -100%)",
               pointerEvents: "none",
-              backgroundColor: "rgba(55, 65, 81, 0.9)",
+              backgroundColor: "rgba(55,65,81,0.9)",
               color: "white",
               padding: "0.25rem 0.5rem",
               borderRadius: "0.25rem",
